@@ -25,9 +25,9 @@ const Float pi = 4 * atan((Float)1);
 #define GRAV
 
 // Grid size
-#define Nx 100//120
-#define Ny 100//120
-#define Nz 100//120
+#define Nx 120//120
+#define Ny 120//120
+#define Nz 120//120
 
 std::string prefix = "./phidata/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
