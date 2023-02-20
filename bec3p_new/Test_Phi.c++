@@ -132,8 +132,8 @@ fflush(stdout);
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
 #endif
-            fprintf(filepsi, "%lg %lg %lg %lg \n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k));
+            fprintf(filepsi, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, psi(i, j, k), phi(i, j, k));
         }
         fprintf(filepsi, "\n");	// For Gnuplot
     }
@@ -175,15 +175,16 @@ fclose(filephi);
 Float init(int i, int j, int k)		
 {
 	Float F, x, y, z, r;
-
+    const double Ri = 0.5;
 	x = xl + i * dx;
 	y = yl + j * dy;
 	z = zl + k * dz;
 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
 	F = 0.0;
 	if (r > R) F = 0.0;
+    else if (r < Ri) F = 0.0;
     else F = 1.0;
-	F = (Float)N *F / (4.0 * pi * R * R * R / 3.0);
+	F = (Float)N *F / (4.0 * pi * R * R * R / 3.0-4.0 * pi * Ri * Ri * Ri / 3.0);
 	return F;
 }
 
