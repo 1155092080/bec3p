@@ -115,7 +115,7 @@ const Float omg = 0.0;                // harmonic trap in rad/[T]
 
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
-const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
+const Float tolPSN = 1e-5;				// Poisson relaxation method iteration
 const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
 // Output control
