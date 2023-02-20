@@ -29,7 +29,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 150//120
 #define Nz 150//120
 
-std::string prefix = "./phidata/";
+std::string prefix = "./data/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -98,7 +98,7 @@ const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.000002;//10;					// Time step (units of [T])
+const Float tau = 0.00000002;//10;					// Time step (units of [T])
 const int time_n = 10;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 244.344;//2.0;					// Particle number (may be scaled)
