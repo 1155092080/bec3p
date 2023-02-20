@@ -182,7 +182,8 @@ Float init(int i, int j, int k)
 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
 	F = 0.0;
 	if (r > R) F = 0.0;
-	else F = (Float)N  / (4.0 * pi * R * R * R / 3.0);
+    else F = 1.0;
+	F = (Float)N *F / (4.0 * pi * R * R * R / 3.0);
 	return F;
 }
 
