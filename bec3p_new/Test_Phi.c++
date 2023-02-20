@@ -233,7 +233,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 #endif
 			rtot1 += phi(i, j, k);
 		}
-    fprintf(stderr, "error = %lg", fabs(rtot2 - rtot1)/fabs(rtot1));
+    fprintf(stderr, "error = %lg.\n", fabs(rtot2 - rtot1)/fabs(rtot1));
     fflush(stderr);
 	}
 
