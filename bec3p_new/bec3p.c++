@@ -1200,13 +1200,13 @@ void movieX(int itime)	// Outputs files
 	FILE *file8, *file10, *file11;
 	string filepath;
 
-	sprintf(ch, "densZ%07d.dat", itime);
+	sprintf(ch, "densX%07d.dat", itime);
 	filepath = path + ch;
 	file8 = fopen(filepath.c_str(), "w");
-	sprintf(cs, "phasZ%07d.dat", itime);
+	sprintf(cs, "phasX%07d.dat", itime);
 	filepath = path + cs;
 	file10 = fopen(filepath.c_str(), "w");
-	sprintf(cu, "gravZ%07d.dat", itime);
+	sprintf(cu, "gravX%07d.dat", itime);
 	filepath = path + cu;
 	file11 = fopen(filepath.c_str(), "w");
 
@@ -1245,13 +1245,13 @@ void movieY(int itime)	// Outputs files
 	FILE *file8, *file10, *file11;
 	string filepath;
 
-	sprintf(ch, "densZ%07d.dat", itime);
+	sprintf(ch, "densY%07d.dat", itime);
 	filepath = path + ch;
 	file8 = fopen(filepath.c_str(), "w");
-	sprintf(cs, "phasZ%07d.dat", itime);
+	sprintf(cs, "phasY%07d.dat", itime);
 	filepath = path + cs;
 	file10 = fopen(filepath.c_str(), "w");
-	sprintf(cu, "gravZ%07d.dat", itime);
+	sprintf(cu, "gravY%07d.dat", itime);
 	filepath = path + cu;
 	file11 = fopen(filepath.c_str(), "w");
 
