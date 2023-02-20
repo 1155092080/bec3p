@@ -29,7 +29,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 100//120
 #define Nz 100//120
 
-std::string prefix = "./data/";
+std::string prefix = "./phidata/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of

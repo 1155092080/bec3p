@@ -132,6 +132,8 @@ fflush(stdout);
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
 #endif
+            fprintf(filepsi, "%lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, psi(i, j, k));
         }
         fprintf(filepsi, "\n");	// For Gnuplot
     }
