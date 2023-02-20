@@ -24,12 +24,15 @@ const Float pi = 4 * atan((Float)1);
 // Self-gravitating or trapped condensate?
 #define GRAV
 
+// Use initial file or generate initial condition by init function?
+#define INIFILE
+
 // Grid size
 #define Nx 152//120
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data/";
+std::string prefix = "./data_2e6/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -98,7 +101,7 @@ const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.00000002;//10;					// Time step (units of [T])
+const Float tau = 0.000002;//10;					// Time step (units of [T])
 const int time_n = 10;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 244.344;//2.0;					// Particle number (may be scaled)
@@ -120,6 +123,6 @@ const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output
-const int nstep1 = 1;	// every how many steps energy is output
+const int nstep1 = 5;	// every how many steps psi and phi are output
 const int nstep2 = 20;	// every how many steps contour plot is output
 #endif

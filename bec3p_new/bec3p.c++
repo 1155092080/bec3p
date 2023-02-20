@@ -297,7 +297,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	Float norm, norm0;
 	Float E0, E1 = 0, E2 = 0;
 	int i, j, k, itime, ktime;
-	FILE *file21, *file22, *file23, *file24, *file33, *file34, *file41, *filephi;
+	FILE *fileini, *fileerg, *file21, *file22, *file23, *file24, *file_current;
 	Float nrma[NRMN];
 	int nrmc;
 	complex<Float> foo1X, foo1XS, foo1Y, foo1YS, foo1ZS;
@@ -311,6 +311,7 @@ int _tmain(int argc, _TCHAR* argv[])
     //mkdirretval=light::mkpath("./lsl/foo2/bar");
     mkdirretval=light::mkpath(path.c_str());
     std::cout << mkdirretval << '\n';
+	string filepath;
 #ifdef BARY
 printf("Reading visible matter grav. potential...\n");
 fflush(stdout);
@@ -385,8 +386,8 @@ fflush(stdout);
 	foo5Z = (Float)1 - xi * dt * idz2 / (Float)2;
 
 	// Initial state
-
-	file34 = fopen("./data/psi_ini.dat", "w");
+	filepath = path + "psi_ini.dat";
+	fileini = fopen(filepath.c_str(), "w");
 	t = 0.0;
 	itime = 0;
 	ktime = 0;
@@ -407,12 +408,12 @@ fflush(stdout);
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
 #endif
-			fprintf(file34, "%lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k));
+			fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, psi(i, j, k), phi(i, j, k));
 		}
-		fprintf(file34, "\n");	// For Gnuplot
+		fprintf(fileini, "\n");	// For Gnuplot
 	}
-	fclose(file34);
+	fclose(fileini);
 	norm_ini = get_normsimp();
 	printf("Initial norm is P=%11.4lg\n", norm_ini);
 	fflush(stdout);
@@ -470,20 +471,25 @@ printf("Initiate the iteration...\n");
 fflush(stdout);
 
 	// get initial U 
-	file41 = fopen("./data/erg41.dat", "w");
+	filepath = path + "ergini.dat";
+	fileerg = fopen(filepath.c_str(), "w");
 	get_U(mu);
 
 	norm =  get_normsimp();
 	printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", 0, 0.0,
-			energy(mu, file41), norm);
+			energy(mu, fileerg), norm);
 	fflush(stdout);
 
 	movie(itime);	// Output data for contour plots
 
-	file21 = fopen("./data/psi21.dat", "w");
-	file22 = fopen("./data/psi22.dat", "w");
-	file23 = fopen("./data/psi23.dat", "w");
-	file24 = fopen("./data/psi24.dat", "w");
+	filepath = path + "psi21.dat";
+	file21 = fopen(filepath.c_str(), "w");
+	filepath = path + "psi22.dat";
+	file22 = fopen(filepath.c_str(), "w");
+	filepath = path + "psi23.dat";
+	file23 = fopen(filepath.c_str(), "w");
+	filepath = path + "psi24.dat";
+	file24 = fopen(filepath.c_str(), "w");
 
 	// Time loop
 
@@ -554,23 +560,24 @@ fflush(stdout);
 	fflush(stderr);
 #endif
 
-		E0 = energy(mu, file41);
+		E0 = energy(mu, fileerg);
 		printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", itime, t, E0, norm);
 		fflush(stdout);
 
 		if (itime > 10 && itime % nstep1 == 0)
 		{
-			file33 = fopen("./data/psidense.dat", "w");
+			filepath = path + "psi_phi.dat";
+			file_current = fopen(filepath.c_str(), "w");
 
 			for (i = 0; i <= Nx; i++)
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file33, "%lg %lg %lg %lg\n", xl + i * dx,
-												yl + j * dy, zl + k * dz, density(i, j, k));
-				fprintf(file33, "\n");  // For Gnuplot
+						fprintf(file_current, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, psi(i, j, k), phi(i, j, k));
+				fprintf(file_current, "\n");  // For Gnuplot
 			}
-			fclose(file33);
+			fclose(file_current);
 		}
 		if (itime > nstep0 && itime % nstep2 == 0)
 		{
@@ -654,7 +661,7 @@ fflush(stdout);
 	fclose(file22);
 	fclose(file23);
 	fclose(file24);
-	fclose(file41);
+	fclose(fileerg);
 
 #ifdef USECL
 	finalizeCL();
@@ -692,7 +699,7 @@ Float init(int i, int j, int k)
 //**********************************************************************
 // Energy in lab frame, i.e. not calculating the rotational energy
 //**********************************************************************
-Float energy(Float mu, FILE *file41)
+Float energy(Float mu, FILE *fileerg)
 {
 	Float EK, EU, EI, EG, mdpsisq;
 	int i, j, k;
@@ -722,8 +729,8 @@ Float energy(Float mu, FILE *file41)
 	EU *= dV;
 	EG *= dV;
 	EK *= (Float)0.125 * dV;  // 1/2*((\psi_i+1)-(\psi_i-1))/2dx)^2=1/8*...
-	fprintf(file41, "%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI);
-	fflush(file41);
+	fprintf(fileerg, "%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI);
+	fflush(fileerg);
 	return EK + EU + EI;
 }
 
