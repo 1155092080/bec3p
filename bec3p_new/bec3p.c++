@@ -452,19 +452,6 @@ fflush(stdout);
 	get_phi();
 #else
 	get_Vtr();
-	// Save trap information
-	filephi = fopen("./data/phi_ini.dat", "w");
-	for (i = 0; i <= Nx; i++)
-	{
-		for (j = 0; j <= Ny; j++)
-			for (k = 0; k <= Nz; k++)
-		{
-				fprintf(filephi, "%lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, phi(i, j, k));
-		}
-		fprintf(filephi, "\n");	// For Gnuplot
-	}
-	fclose(filephi);
 #endif
 
 printf("Initiate the iteration...\n");
@@ -1166,13 +1153,17 @@ void movieZ(int itime)	// Outputs files
 	char ch[17], cs[17], cu[17];
 	int i, j, k;
 	FILE *file8, *file10, *file11;
+	string filepath;
 
-	sprintf(ch, "./data/densZ%07d.dat", itime);
-	sprintf(cs, "./data/phasZ%07d.dat", itime);
-	sprintf(cu, "./data/gravZ%07d.dat", itime);
-	file8 = fopen(ch, "w");
-	file10 = fopen(cs, "w");
-	file11 = fopen(cu, "w");
+	sprintf(ch, "densZ%07d.dat", itime);
+	filepath = path + ch;
+	file8 = fopen(filepath.c_str(), "w");
+	sprintf(cs, "phasZ%07d.dat", itime);
+	filepath = path + cs;
+	file10 = fopen(filepath.c_str(), "w");
+	sprintf(cu, "gravZ%07d.dat", itime);
+	filepath = path + cu;
+	file11 = fopen(filepath.c_str(), "w");
 
 	// Output files for contour plots
 
@@ -1207,13 +1198,17 @@ void movieX(int itime)	// Outputs files
 	char ch[17], cs[17], cu[17];
 	int i, j, k;
 	FILE *file8, *file10, *file11;
+	string filepath;
 
-	sprintf(ch, "./data/densX%07d.dat", itime);
-	sprintf(cs, "./data/phasX%07d.dat", itime);
-	sprintf(cu, "./data/gravX%07d.dat", itime);
-	file8 = fopen(ch, "w");
-	file10 = fopen(cs, "w");
-	file11 = fopen(cu, "w");
+	sprintf(ch, "densZ%07d.dat", itime);
+	filepath = path + ch;
+	file8 = fopen(filepath.c_str(), "w");
+	sprintf(cs, "phasZ%07d.dat", itime);
+	filepath = path + cs;
+	file10 = fopen(filepath.c_str(), "w");
+	sprintf(cu, "gravZ%07d.dat", itime);
+	filepath = path + cu;
+	file11 = fopen(filepath.c_str(), "w");
 
 	// Output files for contour plots
 
@@ -1248,13 +1243,17 @@ void movieY(int itime)	// Outputs files
 	char ch[17], cs[17], cu[17];
 	int i, j, k;
 	FILE *file8, *file10, *file11;
+	string filepath;
 
-	sprintf(ch, "./data/densY%07d.dat", itime);
-	sprintf(cs, "./data/phasY%07d.dat", itime);
-	sprintf(cu, "./data/gravY%07d.dat", itime);
-	file8 = fopen(ch, "w");
-	file10 = fopen(cs, "w");
-	file11 = fopen(cu, "w");
+	sprintf(ch, "densZ%07d.dat", itime);
+	filepath = path + ch;
+	file8 = fopen(filepath.c_str(), "w");
+	sprintf(cs, "phasZ%07d.dat", itime);
+	filepath = path + cs;
+	file10 = fopen(filepath.c_str(), "w");
+	sprintf(cu, "gravZ%07d.dat", itime);
+	filepath = path + cu;
+	file11 = fopen(filepath.c_str(), "w");
 
 	// Output files for contour plots
 
