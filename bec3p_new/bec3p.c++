@@ -402,18 +402,30 @@ fflush(stdout);
 			Float y2 = SQ(yl + j * dy);
 			Float z2 = SQ(zl + k * dz);
 			Float r = sqrt(x2 + y2 + z2);
-
-			psi(i, j, k) = sqrt(rho);
 			phi(i, j, k) = (Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
+			psi(i, j, k) = sqrt(rho);
+			
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
 #endif
-			fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k), phi(i, j, k));
-		}
-		fprintf(fileini, "\n");	// For Gnuplot
+			
+		}		
 	}
-	fclose(fileini);
+	
+	norm_ini = get_normsimp();
+	Float renorm = sqrt(N / norm_ini);
+	for (i = 0; i <= Nx; i++)
+	{
+		for (j = 0; j <= Ny; j++)
+			for (k = 0; k <= Nz; k++)
+			{
+				psi(i, j, k) *= renorm;
+				fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, psi(i, j, k), phi(i, j, k));
+			}	
+			fprintf(fileini, "\n");	// For Gnuplot		
+	}
+	fclose(fileini);	
 	norm_ini = get_normsimp();
 	printf("Initial norm is P=%11.4lg\n", norm_ini);
 	fflush(stdout);
@@ -487,7 +499,7 @@ fflush(stdout);
 	{
 		bool bLoop;
 		t += real(dt);
-		if ((itime - ktime) == despin_n) omega = 0;
+		if ((itime - ktime) == despin_n) omega = 0.0;
 
 		// Find psi'=Rx(psi_old)
 		calc_rhs_x(foo1X, foo3X, foo4, foo5X);
