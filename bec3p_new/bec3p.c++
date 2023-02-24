@@ -353,7 +353,7 @@ fflush(stdout);
 	memset(dens, 0, sizeof(dens));
 
 	dt = complex<Float>(0, -tau);
-	omega = 0;
+	omega = omega0;
 	gamma = 0;
 #ifdef GRAV
 	mu = 0;
@@ -499,7 +499,7 @@ fflush(stdout);
 	{
 		bool bLoop;
 		t += real(dt);
-		if ((itime - ktime) == despin_n) omega = 0.0;
+		//if ((itime - ktime) == despin_n) omega = 0.0;
 
 		// Find psi'=Rx(psi_old)
 		calc_rhs_x(foo1X, foo3X, foo4, foo5X);
