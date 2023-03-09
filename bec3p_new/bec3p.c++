@@ -312,6 +312,7 @@ int _tmain(int argc, _TCHAR* argv[])
     mkdirretval=light::mkpath(path.c_str());
     std::cout << mkdirretval << '\n';
 	string filepath;
+	bool imagt = true;
 #ifdef BARY
 printf("Reading visible matter grav. potential...\n");
 fflush(stdout);
@@ -558,7 +559,16 @@ fflush(stdout);
 	fprintf(stderr, "H_z required %d interations.\n", nrmc);
 	fflush(stderr);
 #endif
-
+if (imagt){
+			Float renorm = sqrt(N / norm);
+			for (i = 0; i <= Nx; i++)
+				for (j = 0; j <= Ny; j++)
+					for (k = 0; k <= Nz; k++)
+				psi(i, j, k) *= renorm;
+			// norm = get_normsimp();
+			// printf("Checking at N=%6d, t=%11.4lg, P=%11.4lg\n", itime, t, norm);
+			// fflush(stdout);
+			}
 		E0 = energy(mu, fileerg);
 		printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", itime, t, E0, norm);
 		fflush(stdout);
@@ -608,6 +618,7 @@ fflush(stdout);
 				dt = tau;
 				omega = omega0;
 				gamma = gamma0;
+				imagt = false;
 #ifndef GRAV
 				mu = 0;
 #endif
@@ -638,20 +649,11 @@ fflush(stdout);
 				E1 = E0;
 				ktime++;
 			}
-#if 1
-			Float renorm = sqrt(N / norm);
-			for (i = 0; i <= Nx; i++)
-				for (j = 0; j <= Ny; j++)
-					for (k = 0; k <= Nz; k++)
-				psi(i, j, k) *= renorm;
-			// norm = get_normsimp();
-			// printf("Checking at N=%6d, t=%11.4lg, P=%11.4lg\n", itime, t, norm);
-			// fflush(stdout);
+
 #ifdef GRAV
 			get_phi();
 #endif
 			get_U(mu);
-#endif
 		}
 
 	}	// Close time loop
