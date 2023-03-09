@@ -102,7 +102,7 @@ const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float shiftphi = 750000;                                        // Shift energy for the phi
+const Float shiftphi = 8500;                                        // Shift gravitational potential field for the phi
 const Float tau = 0.0000002;//10;					// Time step (units of [T])
 const int time_n = 1000;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
