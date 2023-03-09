@@ -700,7 +700,7 @@ Float init(int i, int j, int k)
 //**********************************************************************
 Float energy(Float mu, FILE *fileerg)
 {
-	Float EK, EU, EI, EG, mdpsisq;
+	Float EK, EU, EI, EG, mdpsisq, E;
 	int i, j, k;
 	const static Float dV = dx * dy * dz;
 
@@ -728,7 +728,8 @@ Float energy(Float mu, FILE *fileerg)
 	EU *= dV;
 	EG *= dV;
 	EK *= (Float)0.125 * dV;  // 1/2*((\psi_i+1)-(\psi_i-1))/2dx)^2=1/8*...
-	fprintf(fileerg, "%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI);
+	E = EK+EI+EU;
+	fprintf(fileerg, "%lg\t%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI, E);
 	fflush(fileerg);
 	return EK + EU + EI;
 }
