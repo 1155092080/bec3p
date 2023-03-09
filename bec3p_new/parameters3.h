@@ -23,7 +23,8 @@ const Float pi = 4 * atan((Float)1);
 
 // Self-gravitating or trapped condensate?
 #define GRAV
-
+// Shift gravitational field or not?
+#define SHIFTP
 // Use initial file or generate initial condition by init function?
 #define INIFILE
 
@@ -32,7 +33,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_negtau_2e6_pow6_152/";
+std::string prefix = "./data_shift_2e7_pow6_152/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -101,8 +102,9 @@ const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.000002;//10;					// Time step (units of [T])
-const int time_n = 100;//0000;				// Number of iterations to run
+const Float shiftphi = 750000;                                        // Shift energy for the phi
+const Float tau = 0.0000002;//10;					// Time step (units of [T])
+const int time_n = 1000;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 244.344;//2.0;					// Particle number (may be scaled)
 const Float R = 1.00179;///50.0;					// Size of initial condensate (in [L])
@@ -119,7 +121,7 @@ const Float omg = 0.0;                // harmonic trap in rad/[T]
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
 const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
-const Float tolREL = 1e-6;				// Imaginary time system relaxation
+const Float tolREL = 1e-8;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output

@@ -356,7 +356,7 @@ fflush(stdout);
 	omega = omega0;
 	gamma = 0;
 #ifdef GRAV
-	mu = 0;
+	mu = 0 ;
 #else
 	mu = 0;//0.5 / SQ(R);
 #endif
@@ -691,7 +691,7 @@ Float init(int i, int j, int k)
 	if (r > 0) F = sin(r / R) / (r / R);
 	else if (r == 0) F = 1;
 	if (F <= 0) F = 0;
-	else F = (Float)N * pow(F, 7) / (4 * pi * R * R * R / 3);
+	else F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
@@ -1396,6 +1396,9 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		phiU(i, j, k) = phi(i, j, k) 
 		#ifdef BARY
 		+ Ub(x, y, z)
+		#endif
+		#ifdef SHIFTP
+		+ shiftphi
 		#endif
 		;
 	}
