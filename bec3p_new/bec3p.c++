@@ -1400,7 +1400,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		+ Ub(x, y, z)
 		#endif
 		#ifdef SHIFTP
-		+ shiftphi
+		+ shiftphi/(Nx*Ny*Nz)
 		#endif
 		;
 	}
