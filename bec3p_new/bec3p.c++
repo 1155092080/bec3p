@@ -691,7 +691,7 @@ Float init(int i, int j, int k)
 	if (r > 0) F = sin(r / R) / (r / R);
 	else if (r == 0) F = 1;
 	if (F <= 0) F = 0;
-	else F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
+	else F = (Float)N * pow(F, 7) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
