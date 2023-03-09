@@ -22,7 +22,7 @@ const Float pi = 4 * atan((Float)1);
 // User-configurable parameters begin here
 
 // Self-gravitating or trapped condensate?
-#define GRAV
+// #define GRAV
 // Shift gravitational field or not?
 #define SHIFTP
 // Use initial file or generate initial condition by init function?
@@ -33,7 +33,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_shift_2e7_pow6_152/";
+std::string prefix = "./data_2e7_harmo_152/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -102,7 +102,7 @@ const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float shiftphi = 8500;                                        // Shift gravitational potential field for the phi
+const Float shiftphi = -8000;                                        // Shift gravitational potential field for the phi
 const Float tau = 0.0000002;//10;					// Time step (units of [T])
 const int time_n = 1000;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
@@ -116,7 +116,7 @@ const Float ez = 0.0;
 const Float omega0 = 0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
 const Float gamma0 = 0.0;				// Softening parameter
 const int despin_n = 1;				// When to stop spinning the condensate
-const Float omg = 0.0;                // harmonic trap in rad/[T]
+const Float omg = 4500;                // harmonic trap in rad/[T]
 
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
