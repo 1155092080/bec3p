@@ -408,7 +408,7 @@ fflush(stdout);
 			Float r = sqrt(x2 + y2 + z2);
 			phi(i, j, k) = (Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
-			phiBary(i,j,k) = BaryU(xl + i * dx,yl + j * dy,zl + k * dz);
+			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
