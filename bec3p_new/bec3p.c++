@@ -53,7 +53,7 @@ Float *phiBary = new Float[Nn];
 // Forward declarations
 Float init(int, int, int);
 Float fermi(Float, int, int, int);
-Float BaryU(Float, int, int, int);
+Float BaryU(int, int, int);
 Float get_normsimp();
 void get_cond(Float &, Float &, Float &, Float, Float &);
 
