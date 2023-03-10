@@ -22,9 +22,11 @@ const Float pi = 4 * atan((Float)1);
 // User-configurable parameters begin here
 
 // Self-gravitating or trapped condensate?
-// #define GRAV
+#define GRAV
 // Shift gravitational field or not?
-#define SHIFTP
+// #define SHIFTP
+// Add baryonic matter or not?
+#define BARY
 // Use initial file or generate initial condition by init function?
 #define INIFILE
 
