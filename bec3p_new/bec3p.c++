@@ -690,10 +690,11 @@ Float init(int i, int j, int k)
 //	if (r < R) F = (Float)N * 27 / 8 / pi * SQ(log((r > 0 ? r : .5 * dx) / R))
 //					/ (4 * pi * R * R * R / 3);
 
-	if (r > 0) F = sin(r / R) / (r / R);
+	if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
 	else if (r == 0) F = 1;
-	if (F <= 0) F = 0;
-	else F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
+	else F = 0;
+	// if (F <= 0) F = 0;
+	F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
