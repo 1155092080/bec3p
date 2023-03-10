@@ -37,6 +37,7 @@ Float *phi = new Float[Nn];
 Float *phiU = new Float[Nn];
 Float *UU = new Float[Nn];
 Float *res = new Float[Nn];
+Float *phiBary = new Float[Nn];
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
@@ -47,11 +48,12 @@ Float *res = new Float[Nn];
 #define phiU(i,j,k) (phiU[ijk(i,j,k)])
 #define U(i,j,k) (UU[ijk(i,j,k)])
 #define res(i,j,k) (res[ijk(i,j,k)])
+#define phiBary(i,j,k) (phiBary[ijk(i,j,k)])
 
 // Forward declarations
 Float init(int, int, int);
 Float fermi(Float, int, int, int);
-Float Bary(Float, int, int, int);
+Float BaryU(Float, int, int, int);
 Float get_normsimp();
 void get_cond(Float &, Float &, Float &, Float, Float &);
 
@@ -406,6 +408,7 @@ fflush(stdout);
 			Float r = sqrt(x2 + y2 + z2);
 			phi(i, j, k) = (Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
+			phiBary(i,j,k) = BaryU(xl + i * dx,yl + j * dy,zl + k * dz);
 			
 #else
 			psi(i, j, k) = fermi(mu, i, j, k);
@@ -702,7 +705,7 @@ Float init(int i, int j, int k)
 //*********************************************************************
 // Constant Baryonic gravitational potential
 //*********************************************************************
-Float Bary(int i, int j, int k)		
+Float BaryU(int i, int j, int k)		
 {
 	Float F, x, y, z, r;
 
@@ -1416,7 +1419,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		double z = zl + k * dz;
 		phiU(i, j, k) = phi(i, j, k) 
 		#ifdef BARY
-		+ Bary(x, y, z)
+		+ phiBary(i, j, k)
 		#endif
 		#ifdef SHIFTP
 		+ shiftphi
