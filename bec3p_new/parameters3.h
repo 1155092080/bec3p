@@ -35,7 +35,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_2e7_harmo_152/";
+std::string prefix = "./data_2e7_bary_152/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -123,7 +123,7 @@ const Float omg = 4500;                // harmonic trap in rad/[T]
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
 const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
-const Float tolREL = 1e-8;				// Imaginary time system relaxation
+const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output
