@@ -51,6 +51,7 @@ Float *res = new Float[Nn];
 // Forward declarations
 Float init(int, int, int);
 Float fermi(Float, int, int, int);
+Float Bary(Float, int, int, int);
 Float get_normsimp();
 void get_cond(Float &, Float &, Float &, Float, Float &);
 
@@ -317,7 +318,7 @@ int _tmain(int argc, _TCHAR* argv[])
 printf("Reading visible matter grav. potential...\n");
 fflush(stdout);
 
-read_Ub();
+// read_Ub();
 
 
 printf("Read.\n");
@@ -698,6 +699,23 @@ Float init(int i, int j, int k)
 	return F;
 }
 
+//*********************************************************************
+// Constant Baryonic gravitational potential
+//*********************************************************************
+Float Bary(int i, int j, int k)		
+{
+	Float F, x, y, z, r;
+
+	x = xl + i * dx;
+	y = yl + j * dy;
+	z = zl + k * dz;
+	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
+	F = 0.0;
+	if (r<=R) F = (Float)(-G * N *(3*SQ(R)-SQ(r))/ (2*R*R*R));
+	else F = (Float)(-G * N / r);
+	return F;
+}
+
 //**********************************************************************
 // Energy in lab frame, i.e. not calculating the rotational energy
 //**********************************************************************
@@ -714,7 +732,7 @@ Float energy(Float mu, FILE *fileerg)
 	{
 		mdpsisq = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k))); // density rho
 		EI += SQ(mdpsisq); // rho^2
-		EG += 0.5 * (phi(i, j, k)) * mdpsisq; // Question: Why 1/2? 
+		EG += 0.5 * (phi(i, j, k)) * mdpsisq; 
 		EU += (
 #ifdef GRAV
 			0.5 *		// See Wang, PRD64, 124009
@@ -1398,7 +1416,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		double z = zl + k * dz;
 		phiU(i, j, k) = phi(i, j, k) 
 		#ifdef BARY
-		+ Ub(x, y, z)
+		+ Bary(x, y, z)
 		#endif
 		#ifdef SHIFTP
 		+ shiftphi
