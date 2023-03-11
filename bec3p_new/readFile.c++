@@ -4,17 +4,22 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
-#include "parameters3.h"
 #include "stdafx.h"
 
 
 using namespace std;
-#pragma once
+
+#define Nx 152//120
+#define Ny 152//120
+#define Nz 152//120
 
 const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
-complex<Float> *psi = new complex<Float>[Nn];
-Float *phi = new Float[Nn];  
-Float dx, dy, dz;
+complex<float> *psi = new complex<float>[Nn];
+float *phi = new float[Nn];  
+float dx, dy, dz;
+// Physical size of simulation volume in units of [L]
+const float xl = -5.0f, yl = -5.0f, zl = -5.0f;
+const float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
