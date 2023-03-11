@@ -404,7 +404,7 @@ fflush(stdout);
 			Float y2 = SQ(yl + j * dy);
 			Float z2 = SQ(zl + k * dz);
 			Float r = sqrt(x2 + y2 + z2);
-			phi(i, j, k) = (Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
+			phi(i, j, k) = BaryU(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
@@ -696,7 +696,7 @@ Float init(int i, int j, int k)
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
+	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
