@@ -8,18 +8,18 @@
 
 
 using namespace std;
-
+#define Float double
 #define Nx 152//120
 #define Ny 152//120
 #define Nz 152//120
 
 const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
-complex<float> *psi = new complex<float>[Nn];
-float *phi = new float[Nn];  
-float dx, dy, dz;
+complex<Float> *psi = new complex<Float>[Nn];
+Float *phi = new Float[Nn];  
+Float dx, dy, dz;
 // Physical size of simulation volume in units of [L]
-const float xl = -5.0f, yl = -5.0f, zl = -5.0f;
-const float xr = 5.0f, yr = 5.0f, zr = 5.0f;
+const Float xl = -5.0f, yl = -5.0f, zl = -5.0f;
+const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
@@ -30,33 +30,33 @@ const float xr = 5.0f, yr = 5.0f, zr = 5.0f;
 void readpsiphi(string file){
     // define variables
 	string fx, fy, fz, fpsi, fphi; //variables from file are here
-	vector<float>V_x;
-	vector<float>V_y;
-	vector<float>V_z;
-	vector<float>V_psi;
-    vector<float>V_phi;
+	vector<Float>V_x;
+	vector<Float>V_y;
+	vector<Float>V_z;
+	vector<Float>V_psi;
+    vector<Float>V_phi;
     //number of lines
-    int n = 0;
+    int n = 1;
 
     ifstream coeff(file); // opening the file
     if (coeff.is_open()) //if the file is opened
     {
         string line;
-        getline(coeff,line);
 
         while (!coeff.eof()) //While the end is not reached
         {
             //I have 5 sets {x, y, z, psi, phi} so use 5 getlines
             getline(coeff, fx, ' ');
-            V_x.push_back(stof(fx));
+            // cout << fx;
+            V_x.push_back(stod(fx));
             getline(coeff, fy, ' ');
-            V_y.push_back(stof(fy));
+            V_y.push_back(stod(fy));
             getline(coeff, fz, ' ');
-            V_z.push_back(stof(fz));
+            V_z.push_back(stod(fz));
             getline(coeff, fpsi, ' ');
-            V_psi.push_back(stof(fpsi));
+            V_psi.push_back(stod(fpsi));
             getline(coeff, fphi, '\n'); //new line after psi value
-            V_phi.push_back(stof(fphi));
+            V_phi.push_back(stod(fphi));
 
             n += 1; //increment number of lines
         }

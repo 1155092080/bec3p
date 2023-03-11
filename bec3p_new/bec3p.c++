@@ -584,7 +584,7 @@ if (imagt){
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file_current, "%lg\t%lg\t%lg\t%lg\t%lg\n", xl + i * dx, yl + j * dy,
+						fprintf(file_current, "%e %e %e %e %e\n", xl + i * dx, yl + j * dy,
 											zl + k * dz, psi(i, j, k), phi(i, j, k));
 				fprintf(file_current, "\n");  // For Gnuplot
 			}
