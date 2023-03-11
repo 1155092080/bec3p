@@ -310,8 +310,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	complex<Float> foo5X, foo5Y, foo5Z;
 	double norm_ini;
 	int mkdirretval;
-    //mkdirretval=light::mkpath("foo2/bar",0755);
-    //mkdirretval=light::mkpath("./lsl/foo2/bar");
     mkdirretval=light::mkpath(path.c_str());
     std::cout << mkdirretval << '\n';
 	string filepath;
