@@ -35,7 +35,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_2e7_bary_152/";
+std::string prefix = "./data_2e6_pow1_bary_152/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -99,13 +99,13 @@ std::string prefix = "./data_2e7_bary_152/";
 // hbar^2 a / m = Gm^2 (R/pi)^2, or R = pi sqrt(hbar^2 a / Gm^3).
 
 // Physical size of simulation volume in units of [L]
-const Float xl = -5.0f, yl = -5.0f, zl = -5.0f;
-const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
+const Float xl = -3.0f, yl = -3.0f, zl = -3.0f;
+const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 #ifndef KERNEL
 // Simulation parameters
 const Float shiftphi = -8000;                                        // Shift gravitational potential field for the phi
-const Float tau = 0.0000002;//10;					// Time step (units of [T])
+const Float tau = 0.000002;//10;					// Time step (units of [T])
 const int time_n = 1000;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 244.344;//2.0;					// Particle number (may be scaled)
