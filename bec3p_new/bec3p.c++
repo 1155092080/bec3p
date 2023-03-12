@@ -77,7 +77,7 @@ void movie(int);
 void thomas(complex<Float> *, complex<Float> *, complex<Float> *,
 			complex<Float> *, int m);
 void get_density();
-void readdouble(FILE*);
+void readdouble(std::string file);
 
 #ifdef USECL
 
