@@ -35,7 +35,8 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_2e6_pow1_bary_152/";
+std::string prefix = "./data_2e6_pow1_bary_152/continue/";
+std::string inifile = "./data_2e6_pow1_bary_152/psi_phi.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
