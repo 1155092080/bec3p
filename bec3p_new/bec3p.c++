@@ -8,6 +8,8 @@
 #include "parameters3.h"
 // #include "phi-interpolator.h"
 #include "mkpath.h"
+#include <fstream>
+#include <iostream>
 #ifdef USECL
 #include <CL/opencl.h>
 #include <SDKCommon.hpp>
@@ -75,6 +77,7 @@ void movie(int);
 void thomas(complex<Float> *, complex<Float> *, complex<Float> *,
 			complex<Float> *, int m);
 void get_density();
+void readdouble(FILE*);
 
 #ifdef USECL
 
@@ -404,8 +407,12 @@ fflush(stdout);
 			Float y2 = SQ(yl + j * dy);
 			Float z2 = SQ(zl + k * dz);
 			Float r = sqrt(x2 + y2 + z2);
+#ifndef INIFILE
 			phi(i, j, k) = BaryU(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
+#else
+			readdouble(inifile);
+#endif
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
@@ -698,6 +705,43 @@ Float init(int i, int j, int k)
 	// if (F <= 0) F = 0;
 	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
 	return F;
+}
+
+//*********************************************************************
+// Read a file as the initial state
+//*********************************************************************
+void readdouble(string file){
+    Float *f_x = new Float[Nn];
+    Float *f_y = new Float[Nn];
+    Float *f_z = new Float[Nn];
+    Float *f_psi = new Float[Nn];
+    Float *f_phi = new Float[Nn];
+    ifstream ifs(file, ios::in); // opening the file
+    if (!ifs.is_open())
+    {
+        cout << "open file fail!" << endl;
+    } 
+    else
+    {
+        cout << "open file successful!" << endl;
+        for (int i = 0; i < Nn; i++)
+        {
+	    cout << i << endl;
+            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
+        }
+        ifs.close();
+        cout << "Finished reading! Number of entries: " << Nn << endl;
+    }
+    for (int i = 0; i <= Nx; i++)
+	{
+		for (int j = 0; j <= Ny; j++)
+			for (int k = 0; k <= Nz; k++)
+		{
+			phi(i, j, k) = f_phi[ijk(i, j, k)];
+			psi(i, j, k) = f_psi[ijk(i, j, k)];
+        }
+    }
+
 }
 
 //*********************************************************************
