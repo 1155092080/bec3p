@@ -42,12 +42,12 @@ void readpsiphi(string file){
     if (coeff.is_open()) //if the file is opened
     {
         string line;
-
+        cout << "file opened!" <<endl;
         while (!coeff.eof()) //While the end is not reached
         {
             //I have 5 sets {x, y, z, psi, phi} so use 5 getlines
-            getline(coeff, fx, ' ');
-            // cout << fx;
+            getline(coeff, fx, '\t');
+            cout << n <<endl;
             V_x.push_back(stod(fx));
             getline(coeff, fy, ' ');
             V_y.push_back(stod(fy));
@@ -75,11 +75,49 @@ void readpsiphi(string file){
         }
     }
 }
+// void readpsiphi2(string file){
+//     // define variables
+//     Float *f_x = new Float[Nn];
+//     Float *f_y = new Float[Nn];
+//     Float *f_z = new Float[Nn];
+//     Float *f_psi = new Float[Nn];
+//     Float *f_phi = new Float[Nn];
+// 	//number of lines
+//     int n = 1;
 
+//     ifstream coeff(file); // opening the file
+//     if (coeff.is_open()) //if the file is opened
+//     {
+//         string line;
+//         cout << "file opened!" <<endl;
+//         while (!coeff.eof()) //While the end is not reached
+//         {
+            
+//             coeff >> f_x[n] >> f_y[n] >> f_z[n] >> f_psi[n] >> f_phi[n];
+//             n += 1; //increment number of lines
+//         }
+//         coeff.close(); //closing the file
+//         cout << "Finished reading! Number of entries: " << n << endl;    
+//     }
+//     else cout << "Unable to open file";
+
+//     for (int i = 0; i <= Nx; i++)
+// 	{
+// 		for (int j = 0; j <= Ny; j++)
+// 			for (int k = 0; k <= Nz; k++)
+// 		{
+// 			phi(i, j, k) = f_phi[ijk(i, j, k)];
+// 			psi(i, j, k) = f_psi[ijk(i, j, k)];
+//         }
+//     }
+// }
 void readdouble(string file){
-    double f_x[Nn], f_y[Nn], f_z[Nn], f_psi[Nn], f_phi[Nn];
-    //ifstream ifs("psi_phi.dat", ios::in);
-    ifstream ifs(file); // opening the file
+    Float *f_x = new Float[Nn];
+    Float *f_y = new Float[Nn];
+    Float *f_z = new Float[Nn];
+    Float *f_psi = new Float[Nn];
+    Float *f_phi = new Float[Nn];
+    ifstream ifs(file, ios::in); // opening the file
     if (!ifs.is_open())
     {
         cout << "open file fail!" << endl;
