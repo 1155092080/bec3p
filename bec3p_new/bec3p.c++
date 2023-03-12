@@ -726,7 +726,6 @@ void readdouble(string file){
         cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
-	    cout << i << endl;
             ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
         }
         ifs.close();
