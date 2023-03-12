@@ -78,15 +78,18 @@ void readpsiphi(string file){
 
 void readdouble(string file){
     double f_x[Nn], f_y[Nn], f_z[Nn], f_psi[Nn], f_phi[Nn];
-    ifstream ifs(file, ios::in);
-    if (!ifs)
+    //ifstream ifs("psi_phi.dat", ios::in);
+    ifstream ifs(file); // opening the file
+    if (!ifs.is_open())
     {
         cout << "open file fail!" << endl;
     } 
     else
     {
+        cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
+	    cout << i << endl;
             ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
         }
         ifs.close();
@@ -114,10 +117,11 @@ int main(){
     fflush(stdout);
 
 	// Zero arrays
-	memset(phi, 0, sizeof(phi));
-	memset(psi, 0, sizeof(psi));
+    memset(phi, 0, sizeof(phi));
+    memset(psi, 0, sizeof(psi));
 
     // Read initial psi and phi from file
+    cout << "Start reading" << endl;
     readdouble("psi_phi.dat");
 
     fileini = fopen("psi_phi_new.dat", "w");
