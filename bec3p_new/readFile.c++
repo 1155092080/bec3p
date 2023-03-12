@@ -18,8 +18,8 @@ complex<Float> *psi = new complex<Float>[Nn];
 Float *phi = new Float[Nn];  
 Float dx, dy, dz;
 // Physical size of simulation volume in units of [L]
-const Float xl = -5.0f, yl = -5.0f, zl = -5.0f;
-const Float xr = 5.0f, yr = 5.0f, zr = 5.0f;
+const Float xl = -3.0f, yl = -3.0f, zl = -3.0f;
+const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
@@ -76,6 +76,33 @@ void readpsiphi(string file){
     }
 }
 
+void readdouble(string file){
+    double f_x[Nn], f_y[Nn], f_z[Nn], f_psi[Nn], f_phi[Nn];
+    ifstream ifs(file, ios::in);
+    if (!ifs)
+    {
+        cout << "open file fail!" << endl;
+    } 
+    else
+    {
+        for (int i = 0; i < Nn; i++)
+        {
+            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
+        }
+        ifs.close();
+        cout << "Finished reading! Number of entries: " << Nn << endl;
+    }
+    for (int i = 0; i <= Nx; i++)
+	{
+		for (int j = 0; j <= Ny; j++)
+			for (int k = 0; k <= Nz; k++)
+		{
+			phi(i, j, k) = f_phi[ijk(i, j, k)];
+			psi(i, j, k) = f_psi[ijk(i, j, k)];
+        }
+    }
+
+}
 int main(){
     int i, j, k;
     dx = (xr - xl) / Nx;
@@ -91,7 +118,7 @@ int main(){
 	memset(psi, 0, sizeof(psi));
 
     // Read initial psi and phi from file
-    readpsiphi("psi_phi.dat");
+    readdouble("psi_phi.dat");
 
     fileini = fopen("psi_phi_new.dat", "w");
 
@@ -99,7 +126,7 @@ int main(){
     {
         for (j = 0; j <= Ny; j++)
             for (k = 0; k <= Nz; k++)
-                fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
+                fprintf(fileini, "%e %e %e %e %e\n", xl + i * dx, yl + j * dy,
                                     zl + k * dz, psi(i, j, k), phi(i, j, k));
         fprintf(fileini, "\n");  // For Gnuplot
     }
