@@ -410,8 +410,6 @@ fflush(stdout);
 #ifndef INIFILE
 			phi(i, j, k) = BaryU(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
-#else
-			readdouble(inifile);
 #endif
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
@@ -422,6 +420,9 @@ fflush(stdout);
 		}		
 	}
 	
+#ifdef INIFILE
+	readdouble(inifile);
+#endif
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
 	for (i = 0; i <= Nx; i++)
