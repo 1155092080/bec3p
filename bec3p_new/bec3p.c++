@@ -56,6 +56,7 @@ Float *phiBary = new Float[Nn];
 Float init(int, int, int);
 Float fermi(Float, int, int, int);
 Float BaryU(int, int, int);
+Float DMiniphi(int i, int j, int k);	
 Float get_normsimp();
 void get_cond(Float &, Float &, Float &, Float, Float &);
 
@@ -318,13 +319,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	string filepath;
 	bool imagt = true;
 #ifdef BARY
-printf("Reading visible matter grav. potential...\n");
-fflush(stdout);
-
-// read_Ub();
-
-
-printf("Read.\n");
+printf("DM Simulation with baryonic matter potential...\n");
 fflush(stdout);
 #endif
 
@@ -408,7 +403,7 @@ fflush(stdout);
 			Float z2 = SQ(zl + k * dz);
 			Float r = sqrt(x2 + y2 + z2);
 #ifndef INIFILE
-			phi(i, j, k) = BaryU(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
+			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #else
 			readdouble(inifile);
@@ -703,7 +698,7 @@ Float init(int i, int j, int k)
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
+	F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
@@ -745,9 +740,10 @@ void readdouble(string file){
 }
 
 //*********************************************************************
-// Constant Baryonic gravitational potential
+// Initial guess of DM gravitational potential from a homogeneous 
+// density profile
 //*********************************************************************
-Float BaryU(int i, int j, int k)		
+Float DMiniphi(int i, int j, int k)		
 {
 	Float F, x, y, z, r;
 
@@ -758,6 +754,28 @@ Float BaryU(int i, int j, int k)
 	F = 0.0;
 	if (r<=R) F = (Float)(-G * N *(3*SQ(R)-SQ(r))/ (2*R*R*R));
 	else F = (Float)(-G * N / r);
+	return F;
+}
+
+//*********************************************************************
+// Constant Baryonic gravitational potential
+// Bulge Core component only
+//*********************************************************************
+Float BaryU(int i, int j, int k)		
+{
+	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
+        
+        Mc1 = 11.4715;
+        Mc2 = 61.1815;
+        rc1 = 2.7;
+        rc2 = 0.42;
+
+	x = xl + i * dx;
+	y = yl + j * dy;
+	z = zl + k * dz;
+	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
+	F = 0.0;
+	F = (Float)(-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-G * Mc2 / sqrt( SQ(rc2) + SQ(r) ) );
 	return F;
 }
 

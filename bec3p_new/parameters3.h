@@ -23,19 +23,17 @@ const Float pi = 4 * atan((Float)1);
 
 // Self-gravitating or trapped condensate?
 #define GRAV
-// Shift gravitational field or not?
-// #define SHIFTP
 // Add baryonic matter or not?
 #define BARY
 // Use initial file or generate initial condition by init function?
-#define INIFILE
+// #define INIFILE
 
 // Grid size
 #define Nx 152//120
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./data_2e6_pow1_bary_152/continue/";
+std::string prefix = "./pow6_Milky";
 std::string inifile = "./data_2e6_pow1_bary_152/psi_phi.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
@@ -105,7 +103,6 @@ const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float shiftphi = -8000;                                        // Shift gravitational potential field for the phi
 const Float tau = 0.000002;//10;					// Time step (units of [T])
 const int time_n = 1000;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
