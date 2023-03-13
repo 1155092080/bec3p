@@ -78,7 +78,7 @@ void movie(int);
 void thomas(complex<Float> *, complex<Float> *, complex<Float> *,
 			complex<Float> *, int m);
 void get_density();
-void readdouble(FILE*);
+void readdouble(std::string file);
 
 #ifdef USECL
 
@@ -405,8 +405,6 @@ fflush(stdout);
 #ifndef INIFILE
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
-#else
-			readdouble(inifile);
 #endif
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
@@ -417,6 +415,9 @@ fflush(stdout);
 		}		
 	}
 	
+#ifdef INIFILE
+	readdouble(inifile);
+#endif
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
 	for (i = 0; i <= Nx; i++)
@@ -721,7 +722,6 @@ void readdouble(string file){
         cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
-	    cout << i << endl;
             ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
         }
         ifs.close();
