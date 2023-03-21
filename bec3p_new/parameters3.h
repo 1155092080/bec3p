@@ -33,7 +33,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./pow6_Milky_rot50/";
+std::string prefix = "./test_rot50/";
 std::string inifile = "./pow6_Milky_rot02/psi_phi.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
@@ -113,10 +113,10 @@ const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;
-const Float omega0 = 50.0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
+const Float omega0 = 0.0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
 const Float gamma0 = 0.0;				// Softening parameter
 const int despin_n = 1000;				// When to stop spinning the condensate
-const Float omg = 4500;                // harmonic trap in rad/[T]
+const Float omg = 50.0;                // harmonic trap in rad/[T]
 
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
