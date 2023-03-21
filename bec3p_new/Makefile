@@ -12,5 +12,5 @@ newbec3pc: bec3p.c++ parameters3.h
 phitest: Test_Phi.c++ parameters3.h
 	c++ -O3 Test_Phi.c++ -o Test_Phi
 
-readtest: readFile.c++ parameters3.h
-	c++ -O3 -std=c++11 readFile.c++ -o readFile
+rottest: rotbec3p.c++ parameters3.h
+	c++ -O3 -std=c++11 rotbec3p.c++ -o rotbec3p
