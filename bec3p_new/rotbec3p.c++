@@ -876,8 +876,7 @@ void get_Rot()
 			for (i = 0; i <= Nx; i++)
 	{
 		rotphi(i, j, k) = -(Float)0.5 *N*SQ(omg)* ((1 + ex) * SQ(xl + i * dx) +
-								(1 + ey) * SQ(yl + j * dy) +
-								(1 + ez) * SQ(zl + k * dz));
+								(1 + ey) * SQ(yl + j * dy) );
 	}
 
 }
