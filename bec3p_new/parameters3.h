@@ -26,15 +26,15 @@ const Float pi = 4 * atan((Float)1);
 // Add baryonic matter or not?
 #define BARY
 // Use initial file or generate initial condition by init function?
-// #define INIFILE
+#define INIFILE
 
 // Grid size
 #define Nx 152//120
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./pow6_Milky";
-std::string inifile = "./data_2e6_pow1_bary_152/psi_phi.dat";
+std::string prefix = "./pow6_Milky_rot50/";
+std::string inifile = "./pow6_Milky_rot02/psi_phi.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -113,9 +113,9 @@ const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;
-const Float omega0 = 0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
+const Float omega0 = 50.0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
 const Float gamma0 = 0.0;				// Softening parameter
-const int despin_n = 1;				// When to stop spinning the condensate
+const int despin_n = 1000;				// When to stop spinning the condensate
 const Float omg = 4500;                // harmonic trap in rad/[T]
 
 // Iteration tolerances
