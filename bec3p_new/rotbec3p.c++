@@ -598,8 +598,8 @@ if (imagt){
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file_current, "%e %e %e %e %e\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k), phi(i, j, k));
+						fprintf(file_current, "%e %e %e %e+j%e %e\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
 				fprintf(file_current, "\n");  // For Gnuplot
 			}
 			fclose(file_current);
@@ -721,7 +721,7 @@ void readdouble(string file){
     Float *f_x = new Float[Nn];
     Float *f_y = new Float[Nn];
     Float *f_z = new Float[Nn];
-    Float *f_psi = new Float[Nn];
+	complex<Float> *f_psi = new complex<Float>[Nn];
     Float *f_phi = new Float[Nn];
     ifstream ifs(file, ios::in); // opening the file
     if (!ifs.is_open())
