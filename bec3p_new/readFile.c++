@@ -9,11 +9,11 @@
 
 using namespace std;
 #define Float double
-#define Nx 152//120
-#define Ny 152//120
-#define Nz 152//120
+#define Nx 0//120
+#define Ny 0//120
+#define Nz 7//120
 
-const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
+const int Nn = 8;//(Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
 complex<Float> *psi = new complex<Float>[Nn];
 Float *phi = new Float[Nn];  
 Float dx, dy, dz;
@@ -75,47 +75,15 @@ void readpsiphi(string file){
         }
     }
 }
-// void readpsiphi2(string file){
-//     // define variables
-//     Float *f_x = new Float[Nn];
-//     Float *f_y = new Float[Nn];
-//     Float *f_z = new Float[Nn];
-//     Float *f_psi = new Float[Nn];
-//     Float *f_phi = new Float[Nn];
-// 	//number of lines
-//     int n = 1;
 
-//     ifstream coeff(file); // opening the file
-//     if (coeff.is_open()) //if the file is opened
-//     {
-//         string line;
-//         cout << "file opened!" <<endl;
-//         while (!coeff.eof()) //While the end is not reached
-//         {
-            
-//             coeff >> f_x[n] >> f_y[n] >> f_z[n] >> f_psi[n] >> f_phi[n];
-//             n += 1; //increment number of lines
-//         }
-//         coeff.close(); //closing the file
-//         cout << "Finished reading! Number of entries: " << n << endl;    
-//     }
-//     else cout << "Unable to open file";
-
-//     for (int i = 0; i <= Nx; i++)
-// 	{
-// 		for (int j = 0; j <= Ny; j++)
-// 			for (int k = 0; k <= Nz; k++)
-// 		{
-// 			phi(i, j, k) = f_phi[ijk(i, j, k)];
-// 			psi(i, j, k) = f_psi[ijk(i, j, k)];
-//         }
-//     }
-// }
+//*********************************************************************
+// Read a file as the initial state
+//*********************************************************************
 void readdouble(string file){
     Float *f_x = new Float[Nn];
     Float *f_y = new Float[Nn];
     Float *f_z = new Float[Nn];
-    Float *f_psi = new Float[Nn];
+	complex<Float> *f_psi = new complex<Float>[Nn];
     Float *f_phi = new Float[Nn];
     ifstream ifs(file, ios::in); // opening the file
     if (!ifs.is_open())
@@ -127,7 +95,6 @@ void readdouble(string file){
         cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
-	    cout << i << endl;
             ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
         }
         ifs.close();
@@ -146,9 +113,9 @@ void readdouble(string file){
 }
 int main(){
     int i, j, k;
-    dx = (xr - xl) / Nx;
-	dy = (yr - yl) / Ny;
-	dz = (zr - zl) / Nz;
+    dx = (xr - xl) / 1;
+	dy = (yr - yl) / 1;
+	dz = (zr - zl) / 1;
     FILE *fileini;
     // Initial conditions
     printf("Setting initial conditions...\n");
@@ -160,7 +127,7 @@ int main(){
 
     // Read initial psi and phi from file
     cout << "Start reading" << endl;
-    readdouble("psi_phi.dat");
+    readdouble("test.dat");
 
     fileini = fopen("psi_phi_new.dat", "w");
 
