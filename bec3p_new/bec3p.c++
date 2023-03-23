@@ -391,6 +391,9 @@ fflush(stdout);
 	t = 0.0;
 	itime = 0;
 	ktime = 0;
+#ifdef INIFILE
+readdouble(inifile);
+#endif
 	for (i = 0; i <= Nx; i++)
 	{
 		for (j = 0; j <= Ny; j++)
@@ -406,6 +409,7 @@ fflush(stdout);
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #endif
+			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
@@ -414,10 +418,6 @@ fflush(stdout);
 			
 		}		
 	}
-	
-#ifdef INIFILE
-	readdouble(inifile);
-#endif
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
 	for (i = 0; i <= Nx; i++)
@@ -426,8 +426,8 @@ fflush(stdout);
 			for (k = 0; k <= Nz; k++)
 			{
 				psi(i, j, k) *= renorm;
-				fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k), phi(i, j, k));
+				fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
 			}	
 			fprintf(fileini, "\n");	// For Gnuplot		
 	}
@@ -587,8 +587,8 @@ if (imagt){
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file_current, "%e %e %e %e %e\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k), phi(i, j, k));
+						fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
 				fprintf(file_current, "\n");  // For Gnuplot
 			}
 			fclose(file_current);
@@ -710,7 +710,8 @@ void readdouble(string file){
     Float *f_x = new Float[Nn];
     Float *f_y = new Float[Nn];
     Float *f_z = new Float[Nn];
-    Float *f_psi = new Float[Nn];
+	Float *f_psi_real = new Float[Nn];
+    Float *f_psi_imag = new Float[Nn];
     Float *f_phi = new Float[Nn];
     ifstream ifs(file, ios::in); // opening the file
     if (!ifs.is_open())
@@ -722,7 +723,7 @@ void readdouble(string file){
         cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
-            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
+            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi_real[i] >> f_psi_imag[i] >> f_phi[i];
         }
         ifs.close();
         cout << "Finished reading! Number of entries: " << Nn << endl;
@@ -733,7 +734,7 @@ void readdouble(string file){
 			for (int k = 0; k <= Nz; k++)
 		{
 			phi(i, j, k) = f_phi[ijk(i, j, k)];
-			psi(i, j, k) = f_psi[ijk(i, j, k)];
+			psi(i, j, k) = {f_psi_real[ijk(i, j, k)], f_psi_imag[ijk(i, j, k)]};
         }
     }
 
