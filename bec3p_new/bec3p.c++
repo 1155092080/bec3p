@@ -409,7 +409,7 @@ readdouble(inifile);
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #endif
-			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
+			// phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
@@ -620,6 +620,18 @@ if (imagt){
 			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
 				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
 			{
+				filepath = path + "psi_phi_ground.dat";
+				file_current = fopen(filepath.c_str(), "w");
+
+				for (i = 0; i <= Nx; i++)
+				{
+					for (j = 0; j <= Ny; j++)
+						for (k = 0; k <= Nz; k++)
+							fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+												zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+					fprintf(file_current, "\n");  // For Gnuplot
+				}
+				fclose(file_current);
 				dt = tau;
 				omega = omega0;
 				gamma = gamma0;

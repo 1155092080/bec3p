@@ -33,7 +33,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./2.4g_rot1/";
+std::string prefix = "./2.4g_rot5/";
 std::string inifile = "./ini.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
