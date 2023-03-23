@@ -395,6 +395,9 @@ fflush(stdout);
 	t = 0.0;
 	itime = 0;
 	ktime = 0;
+#ifdef INIFILE
+readdouble(inifile);
+#endif
 	for (i = 0; i <= Nx; i++)
 	{
 		for (j = 0; j <= Ny; j++)
@@ -410,6 +413,7 @@ fflush(stdout);
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #endif
+			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
@@ -419,9 +423,7 @@ fflush(stdout);
 		}		
 	}
 	
-#ifdef INIFILE
-	readdouble(inifile);
-#endif
+
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
 	for (i = 0; i <= Nx; i++)
