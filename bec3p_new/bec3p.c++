@@ -578,7 +578,7 @@ if (imagt){
 		printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", itime, t, E0, norm);
 		fflush(stdout);
 
-		if (itime > 10 && itime % nstep1 == 0)
+		if (itime > 0 && itime % nstep1 == 0)
 		{
 			filepath = path + "psi_phi.dat";
 			file_current = fopen(filepath.c_str(), "w");
@@ -587,9 +587,11 @@ if (imagt){
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
-				fprintf(file_current, "\n");  // For Gnuplot
+					{
+						fprintf(file_current, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+													zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+					}	
+					fprintf(file_current, "\n");	// For Gnuplot		
 			}
 			fclose(file_current);
 		}
