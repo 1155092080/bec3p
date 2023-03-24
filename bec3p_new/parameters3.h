@@ -33,8 +33,8 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./2.4g_rot5/";
-std::string inifile = "./ini.dat";
+std::string prefix = "./2.4g_rot0/";
+std::string inifile = "./psi_ini.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -103,8 +103,8 @@ const Float xr = 3.0f, yr = 3.0f, zr = 3.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.000002;//10;					// Time step (units of [T])
-const int time_n = 1000;//0000;				// Number of iterations to run
+const Float tau = 0.000001;//10;					// Time step (units of [T])
+const int time_n = 0;//0000;				// Number of iterations to run
 const Float G = 26.038;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 244.344;//2.0;					// Particle number (may be scaled)
 const Float R = 1.00179;///50.0;					// Size of initial condensate (in [L])
@@ -114,9 +114,9 @@ const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;
 const Float omega0 = 0.0;//15955.6;//0.0001;				// Initial angular velocity (in /[T])
-const Float gamma0 = 1.0;				// Softening parameter
+const Float gamma0 = 0.0;				// Softening parameter
 const int despin_n = 1000;				// When to stop spinning the condensate
-const Float omg = 50.0;                // harmonic trap in rad/[T]
+const Float omg = 0.0;                // harmonic trap in rad/[T]
 
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
