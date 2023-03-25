@@ -629,7 +629,7 @@ if (imagt){
 				{
 					for (j = 0; j <= Ny; j++)
 						for (k = 0; k <= Nz; k++)
-							fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+							fprintf(file_current, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
 												zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
 					fprintf(file_current, "\n");  // For Gnuplot
 				}
