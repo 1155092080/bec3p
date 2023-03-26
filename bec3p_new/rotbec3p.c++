@@ -395,6 +395,9 @@ fflush(stdout);
 	t = 0.0;
 	itime = 0;
 	ktime = 0;
+#ifdef INIFILE
+readdouble(inifile);
+#endif
 	for (i = 0; i <= Nx; i++)
 	{
 		for (j = 0; j <= Ny; j++)
@@ -410,6 +413,7 @@ fflush(stdout);
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #endif
+			// phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
@@ -419,9 +423,7 @@ fflush(stdout);
 		}		
 	}
 	
-#ifdef INIFILE
-	readdouble(inifile);
-#endif
+
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
 	for (i = 0; i <= Nx; i++)
@@ -430,8 +432,8 @@ fflush(stdout);
 			for (k = 0; k <= Nz; k++)
 			{
 				psi(i, j, k) *= renorm;
-				fprintf(fileini, "%lg %lg %lg %lg %lg\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, psi(i, j, k), phi(i, j, k));
+				fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
 			}	
 			fprintf(fileini, "\n");	// For Gnuplot		
 	}
@@ -598,8 +600,10 @@ if (imagt){
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file_current, "%e %e %e %e+j%e %e\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+					{
+						fprintf(file_current, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+													zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+					}
 				fprintf(file_current, "\n");  // For Gnuplot
 			}
 			fclose(file_current);
@@ -631,6 +635,18 @@ if (imagt){
 			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
 				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
 			{
+				filepath = path + "psi_phi_ground.dat";
+				file_current = fopen(filepath.c_str(), "w");
+
+				for (i = 0; i <= Nx; i++)
+				{
+					for (j = 0; j <= Ny; j++)
+						for (k = 0; k <= Nz; k++)
+							fprintf(file_current, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
+												zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+					fprintf(file_current, "\n");  // For Gnuplot
+				}
+				fclose(file_current);
 				dt = tau;
 				omega = omega0;
 				gamma = gamma0;
@@ -721,7 +737,8 @@ void readdouble(string file){
     Float *f_x = new Float[Nn];
     Float *f_y = new Float[Nn];
     Float *f_z = new Float[Nn];
-	complex<Float> *f_psi = new complex<Float>[Nn];
+	Float *f_psi_real = new Float[Nn];
+    Float *f_psi_imag = new Float[Nn];
     Float *f_phi = new Float[Nn];
     ifstream ifs(file, ios::in); // opening the file
     if (!ifs.is_open())
@@ -733,7 +750,7 @@ void readdouble(string file){
         cout << "open file successful!" << endl;
         for (int i = 0; i < Nn; i++)
         {
-            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi[i] >> f_phi[i];
+            ifs >> f_x[i] >> f_y[i] >> f_z[i] >> f_psi_real[i] >> f_psi_imag[i] >> f_phi[i];
         }
         ifs.close();
         cout << "Finished reading! Number of entries: " << Nn << endl;
@@ -744,7 +761,7 @@ void readdouble(string file){
 			for (int k = 0; k <= Nz; k++)
 		{
 			phi(i, j, k) = f_phi[ijk(i, j, k)];
-			psi(i, j, k) = f_psi[ijk(i, j, k)];
+			psi(i, j, k) = {f_psi_real[ijk(i, j, k)], f_psi_imag[ijk(i, j, k)]};
         }
     }
 
@@ -795,18 +812,19 @@ Float BaryU(int i, int j, int k)
 //**********************************************************************
 Float energy(Float mu, FILE *fileerg)
 {
-	Float EK, EU, EI, EG, mdpsisq, E;
+	Float EK, EU, EI, EG, ER, mdpsisq, E;
 	int i, j, k;
 	const static Float dV = dx * dy * dz;
 
-	EK = EU = EI = EG = 0;
+	EK = EU = EI = EG = ER = 0;
 	for (k = 1; k < Nz; k++)
 		for (j = 1; j < Ny; j++)
 			for (i = 1; i < Nx; i++)
 	{
 		mdpsisq = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k))); // density rho
 		EI += SQ(mdpsisq); // rho^2
-		EG += 0.5 * (phi(i, j, k)) * mdpsisq; 
+		EG += 0.5 * (phi(i, j, k)) * mdpsisq;
+		ER += rotphi(i, j, k) * mdpsisq;
 		EU += (
 #ifdef GRAV
 			0.5 *		// See Wang, PRD64, 124009
@@ -822,11 +840,12 @@ Float energy(Float mu, FILE *fileerg)
 	EI *= (Float)0.5 * c * dV;
 	EU *= dV;
 	EG *= dV;
+	ER *= dV;
 	EK *= (Float)0.125 * dV;  // 1/2*((\psi_i+1)-(\psi_i-1))/2dx)^2=1/8*...
-	E = EK+EI+EU;
-	fprintf(fileerg, "%lg\t%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI, E);
+	E = EK+EI+EU+ER;
+	fprintf(fileerg, "%lg\t%lg\t%lg\t%lg\t%lg\t%lg\t%lg\n", t, EK, EU, EG, EI, ER, E);
 	fflush(fileerg);
-	return EK + EU + EI;
+	return EK + EU + EI + ER;
 }
 
 //**********************************************************************
@@ -875,7 +894,7 @@ void get_Rot()
 		for (j = 0; j <= Ny; j++)
 			for (i = 0; i <= Nx; i++)
 	{
-		rotphi(i, j, k) = -(Float)0.5 *N*SQ(omg)* ((1 + ex) * SQ(xl + i * dx) +
+		rotphi(i, j, k) = -(Float)0.5 *SQ(omg)* ((1 + ex) * SQ(xl + i * dx) +
 								(1 + ey) * SQ(yl + j * dy) );
 	}
 
@@ -1506,7 +1525,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		double z = zl + k * dz;
 		phiU(i, j, k) = phi(i, j, k) 
 		#ifdef BARY
-		+ phiBary(i, j, k)
+		+ phiBary(i, j, k);
 		#endif
 		#ifdef SHIFTP
 		+ shiftphi
