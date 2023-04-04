@@ -709,7 +709,7 @@ Float init(int i, int j, int k)
 //	if (r < R) F = (Float)N * 27 / 8 / pi * SQ(log((r > 0 ? r : .5 * dx) / R))
 //					/ (4 * pi * R * R * R / 3);
 
-	if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
+	if (r > 0 && r<R) F = SQ(sin(pi*r / R) / (pi*r / R));
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;

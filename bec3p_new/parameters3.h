@@ -26,14 +26,14 @@ const Float pi = 4 * atan((Float)1);
 // Add baryonic matter or not?
 #define BARY
 // Use initial file or generate initial condition by init function?
-#define INIFILE
+//#define INIFILE
 
 // Grid size
 #define Nx 152//120
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./test_g_rot0/";
+std::string prefix = "./g_m_rot0/";
 std::string inifile = "./psi_ini.dat";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
