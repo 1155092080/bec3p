@@ -780,8 +780,8 @@ Float BaryU(int i, int j, int k)
 {
 	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
         
-        Mc1 = 11.4715;
-        Mc2 = 61.1815;
+        Mc1 = 1.14715;
+        Mc2 = 6.11815;
         rc1 = 2.7;
         rc2 = 0.42;
 
