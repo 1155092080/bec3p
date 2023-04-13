@@ -22,14 +22,14 @@ const Float pi = 4 * atan((Float)1);
 // User-configurable parameters begin here
 
 // Self-gravitating or trapped condensate?
-#define GRAV
+//#define GRAV
 
 // Grid size
-#define Nx 80//120
-#define Ny 80//120
-#define Nz 80//120
+#define Nx 152//120
+#define Ny 152//120
+#define Nz 152//120
 
-std::string prefix = "./data/";
+std::string prefix = "./datarot/";
 // A comment on units: The Gross-Pitaevskii equation is solved in a
 // "dimensionless" form where the particle mass (M) and the reduced Planck
 // constant (hbar) are both set to 1. This leaves us free to define one of
@@ -93,26 +93,26 @@ std::string prefix = "./data/";
 // hbar^2 a / m = Gm^2 (R/pi)^2, or R = pi sqrt(hbar^2 a / Gm^3).
 
 // Physical size of simulation volume in units of [L]
-const Float xl = -4.0f, yl = -4.0f, zl = -4.0f;
-const Float xr = 4.0f, yr = 4.0f, zr = 4.0f;
+const Float xl = -6.0f, yl = -6.0f, zl = -6.0f;
+const Float xr = 6.0f, yr = 6.0f, zr = 6.0f;
 
 #ifndef KERNEL
 // Simulation parameters
 const Float tau = 0.005;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
-const Float G = 26.0384;//0.0667;				// Newton's constant (may be scaled)
-const Float N = 244.344;//2.0;					// Particle number (may be scaled)
-const Float R = 1;//50.0;					// Size of initial condensate (in [L])
-const Float a = 2.64772;//0.5 * G * SQ(R/pi);		// Scattering length (TF default)
+const Float G = 0.0;//0.0667;				// Newton's constant (may be scaled)
+const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
+const Float R = 1.0;//50.0;					// Size of initial condensate (in [L])
+const Float a = 0.001;//0.5 * G * SQ(R/pi);		// Scattering length (TF default)
 const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;                 // In this way, the trap frequency along z is 3 of that of x and y direction
-const Float omega0 = 0.0;//0.0001;				// Initial angular velocity (in rad/[T])
+const Float omega0 = 1.5;//0.0001;				// Initial angular velocity (in rad/[T])
 const Float gamma0 = 0.0;				// Softening parameter
 //const int despin_n = 1;				// When to stop spinning the condensate
 // const Float aho = 1.0;                // harmonic length (in [L])
-const Float omg = 0.0;                  // harmonic trap (in rad/[T])
+const Float omg = 1.587;                  // harmonic trap (in rad/[T])
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
 const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
@@ -120,6 +120,6 @@ const Float tolREL = 1e-8;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output
-const int nstep1 = 1;	// every how many steps energy is output
-const int nstep2 = 10;	// every how many steps contour plot is output
+const int nstep1 = 5;	// every how many steps energy is output
+const int nstep2 = 1000;	// every how many steps contour plot is output
 #endif

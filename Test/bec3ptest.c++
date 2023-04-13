@@ -377,8 +377,8 @@ fflush(stdout);
 			{
 				for (j = 0; j <= Ny; j++)
 					for (k = 0; k <= Nz; k++)
-						fprintf(file33, "%lg %lg %lg %lg\n", xl + i * dx,
-												yl + j * dy, zl + k * dz, density(i, j, k));
+						fprintf(file33, "%lg %lg %lg %lg %lg %lg\n", xl + i * dx,
+												yl + j * dy, zl + k * dz, real(psi(i,j,k)), imag(psi(i,j,k)), density(i, j, k));
 				fprintf(file33, "\n");  // For Gnuplot
 			}
 			fclose(file33);
