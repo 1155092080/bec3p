@@ -776,22 +776,33 @@ Float DMiniphi(int i, int j, int k)
 // Constant Baryonic gravitational potential
 // Bulge Core component only
 //*********************************************************************
-Float BaryU(int i, int j, int k)		
-{
-	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
+// Float BaryU(int i, int j, int k)		
+// {
+// 	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
         
-        Mc1 = 1.14715;
-        Mc2 = 6.11815;
-        rc1 = 2.7;
-        rc2 = 0.42;
+//         Mc1 = 1.14715;
+//         Mc2 = 6.11815;
+//         rc1 = 2.7;
+//         rc2 = 0.42;
 
-	x = xl + i * dx;
-	y = yl + j * dy;
-	z = zl + k * dz;
-	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
-	F = 0.0;
-	F = (Float)(-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-G * Mc2 / sqrt( SQ(rc2) + SQ(r) ) );
+// 	x = xl + i * dx;
+// 	y = yl + j * dy;
+// 	z = zl + k * dz;
+// 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
+// 	F = 0.0;
+// 	F = (Float)(-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-G * Mc2 / sqrt( SQ(rc2) + SQ(r) ) );
+// 	return F;
+// }
+
+Float BaryU(int i, int j, int k)
+{
+	Float F;
+	//const Float d = (Float)0.25 * (SQ(xr - xl) + SQ(yr - yl) + SQ(zr - zl));
+	F = (Float)0.5 *SQ(omg)*((1 + ex) * SQ(xl + i * dx) +
+								(1 + ey) * SQ(yl + j * dy) +
+								(1 + ez) * SQ(zl + k * dz));
 	return F;
+	
 }
 
 //**********************************************************************
