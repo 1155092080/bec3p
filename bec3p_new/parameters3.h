@@ -26,7 +26,7 @@ const Float pi = 4 * atan((Float)1);
 // Add baryonic matter or not?
 #define BARY
 // Use initial file or generate initial condition by init function?
-//#define INIFILE
+#define INIFILE
 
 // Grid size
 #define Nx 152//120
