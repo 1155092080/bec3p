@@ -409,7 +409,7 @@ readdouble(inifile);
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = sqrt(rho);
 #endif
-			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
+			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
 			
 #else
