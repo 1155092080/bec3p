@@ -26,7 +26,7 @@ const Float pi = 4 * atan((Float)1);
 // Add baryonic matter or not?
 #define BARY
 // Use initial file or generate initial condition by init function?
-#define INIFILE
+// #define INIFILE
 
 // Grid size
 #define Nx 152//120
@@ -103,7 +103,7 @@ const Float xr = 6.0f, yr = 6.0f, zr = 6.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.005;//10;					// Time step (units of [T])
+const Float tau = 0.000005;//10;					// Time step (units of [T])
 const int time_n = 1;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
@@ -121,7 +121,7 @@ const Float omg = 1.587;                // harmonic trap in rad/[T]
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
 const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
-const Float tolREL = 1e-8;				// Imaginary time system relaxation
+const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output

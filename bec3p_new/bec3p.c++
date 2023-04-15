@@ -713,7 +713,7 @@ Float init(int i, int j, int k)
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)N * pow(F, 6) / (4 * pi * R * R * R / 3);
+	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
