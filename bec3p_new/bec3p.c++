@@ -407,7 +407,7 @@ readdouble(inifile);
 			Float r = sqrt(x2 + y2 + z2);
 #ifndef INIFILE
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
-			psi(i, j, k) = sqrt(rho);
+			psi(i, j, k) = sqrt(fermi(mu, i, j, k));
 #endif
 			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
@@ -776,34 +776,34 @@ Float DMiniphi(int i, int j, int k)
 // Constant Baryonic gravitational potential
 // Bulge Core component only
 //*********************************************************************
-// Float BaryU(int i, int j, int k)		
-// {
-// 	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
-        
-//         Mc1 = 1.14715;
-//         Mc2 = 6.11815;
-//         rc1 = 2.7;
-//         rc2 = 0.42;
-
-// 	x = xl + i * dx;
-// 	y = yl + j * dy;
-// 	z = zl + k * dz;
-// 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
-// 	F = 0.0;
-// 	F = (Float)(-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-G * Mc2 / sqrt( SQ(rc2) + SQ(r) ) );
-// 	return F;
-// }
-
-Float BaryU(int i, int j, int k)
+Float BaryU(int i, int j, int k)		
 {
-	Float F;
+	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
+        
+        Mc1 = 1.14715;
+        Mc2 = 6.11815;
+        rc1 = 2.7;
+        rc2 = 0.42;
+
+	x = xl + i * dx;
+	y = yl + j * dy;
+ 	z = zl + k * dz;
+ 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
+	F = 0.0;
+ 	F = (Float)10000.0*((-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-10.0*G * Mc2 / sqrt( 30.0*SQ(rc2) + SQ(r) ) ));
+ 	return F;
+ }
+
+//Float BaryU(int i, int j, int k)
+//{
+//	Float F;
 	//const Float d = (Float)0.25 * (SQ(xr - xl) + SQ(yr - yl) + SQ(zr - zl));
-	F = (Float)0.5 *SQ(omg)*((1 + ex) * SQ(xl + i * dx) +
-								(1 + ey) * SQ(yl + j * dy) +
-								(1 + ez) * SQ(zl + k * dz));
-	return F;
+//	F = (Float)0.5 *SQ(omg)*((1 + ex) * SQ(xl + i * dx) +
+//								(1 + ey) * SQ(yl + j * dy) +
+//								(1 + ez) * SQ(zl + k * dz));
+//	return F;
 	
-}
+//}
 
 //**********************************************************************
 // Energy in lab frame, i.e. not calculating the rotational energy
