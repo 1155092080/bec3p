@@ -25,7 +25,7 @@ const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
 #define NRMN 100
 #define NRMC 1000
 #define NRMP 10000
-#define NTOL 1e-6
+#define NTOL 1e-7
 
 complex<Float> eye, dt;
 Float t, dx, dy, dz, idx2, idy2, idz2;
@@ -780,8 +780,8 @@ Float BaryU(int i, int j, int k)
 {
 	Float F, x, y, z, r, Mc1, Mc2, rc1, rc2;
         
-        Mc1 = 1.14715;
-        Mc2 = 6.11815;
+        Mc1 = 0.0;//1.14715;
+        Mc2 = 61181.5;//6.11815;
         rc1 = 2.7;
         rc2 = 0.42;
 
@@ -790,7 +790,7 @@ Float BaryU(int i, int j, int k)
  	z = zl + k * dz;
  	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
 	F = 0.0;
- 	F = (Float)10000.0*((-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-10.0*G * Mc2 / sqrt( 30.0*SQ(rc2) + SQ(r) ) ));
+ 	F = (Float)((-G * Mc1 / sqrt( SQ(rc1) + SQ(r) ) ) + (-G * Mc2 / sqrt( SQ(rc2) + SQ(r) ) ));
  	return F;
  }
 
