@@ -30,16 +30,16 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./MilkyRot1/";
-std:: string inifile = "./ModBaryDataRot0.5_3/psi_phi.dat";
+std::string prefix = "./MilkyRot0.4/";
+std:: string inifile = "./psi_phi.dat";
 
 
-const Float xl = -8.0f, yl = -8.0f, zl = -8.0f;
-const Float xr = 8.0f, yr = 8.0f, zr = 8.0f;
+const Float xl = -10.0f, yl = -10.0f, zl = -10.0f;
+const Float xr = 10.0f, yr = 10.0f, zr = 10.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.004;//10;					// Time step (units of [T])
+const Float tau = 0.001;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
@@ -49,7 +49,7 @@ const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;                 // In this way, the trap frequency along z is 3 of that of x and y direction
-const Float omega0 = 1.0;//0.0001;				// Initial angular velocity (in rad/[T])
+const Float omega0 = 0.4;//0.0001;				// Initial angular velocity (in rad/[T])
 const Float gamma0 = 0.0;				// Softening parameter
 //const int despin_n = 1;				// When to stop spinning the condensate
 // const Float aho = 1.0;                // harmonic length (in [L])
@@ -61,6 +61,6 @@ const Float tolREL = 1e-8;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output
-const int nstep1 = 5;	// every how many steps energy is output
-const int nstep2 = 1000;	// every how many steps contour plot is output
+const int nstep1 = 10;	// every how many steps energy is output
+const int nstep2 = 500;	// every how many steps contour plot is output
 #endif
