@@ -407,7 +407,7 @@ readdouble(inifile);
 			Float r = sqrt(x2 + y2 + z2);
 #ifndef INIFILE
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
-			psi(i, j, k) = complex<Float>(sqrt(rho), 0);
+			psi(i, j, k) = complex<Float>(sqrt(rho), 0);//complex initialization
 #endif
 			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
