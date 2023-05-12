@@ -30,16 +30,16 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 152//120
 #define Nz 152//120
 
-std::string prefix = "./MilkyRot0.4/";
-std:: string inifile = "./psi_phi.dat";
+std::string prefix = "./MilkyRot0.14_large/";
+std:: string inifile = "./MilkyRot0_large/psi_phi_ground.dat";
 
 
-const Float xl = -10.0f, yl = -10.0f, zl = -10.0f;
-const Float xr = 10.0f, yr = 10.0f, zr = 10.0f;
+const Float xl = -20.0f, yl = -20.0f, zl = -20.0f;
+const Float xr = 20.0f, yr = 20.0f, zr = 20.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.001;//10;					// Time step (units of [T])
+const Float tau = 0.01;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
@@ -49,7 +49,7 @@ const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;                 // In this way, the trap frequency along z is 3 of that of x and y direction
-const Float omega0 = 0.4;//0.0001;				// Initial angular velocity (in rad/[T])
+const Float omega0 = 0.14;//0.0001;				// Initial angular velocity (in rad/[T])
 const Float gamma0 = 0.0;				// Softening parameter
 //const int despin_n = 1;				// When to stop spinning the condensate
 // const Float aho = 1.0;                // harmonic length (in [L])
