@@ -384,16 +384,16 @@ fflush(stdout);
 	foo5X = (Float)1 - xi * dt * idx2 / (Float)2;
 	foo5Y = (Float)1 - xi * dt * idy2 / (Float)2;
 	foo5Z = (Float)1 - xi * dt * idz2 / (Float)2;
+#ifdef INIFILE
+readdouble(inifile);
 
+#endif
 	// Initial state
 	filepath = path + "psi_ini.dat";
 	fileini = fopen(filepath.c_str(), "w");
 	t = 0.0;
 	itime = 0;
 	ktime = 0;
-#ifdef INIFILE
-readdouble(inifile);
-#endif
 	for (i = 0; i <= Nx; i++)
 	{
 		for (j = 0; j <= Ny; j++)
@@ -713,7 +713,7 @@ Float init(int i, int j, int k)
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)N * pow(F, 2) / (4 * pi * R * R * R / 3);
+	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
 	return F;
 }
 
