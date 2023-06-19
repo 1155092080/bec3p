@@ -351,8 +351,12 @@ fflush(stdout);
 	memset(UU, 0, sizeof(UU));
 	memset(res, 0, sizeof(res));
 	memset(dens, 0, sizeof(dens));
-
-	dt = complex<Float>(0, -tau);
+#ifdef REALTIME // Real-time evolution directly from initial conditions
+	dt = complex<Float>(tau, 0.);
+	imagt = false;
+#else
+	dt = complex<Float>(0., -tau);
+#endif
 	omega = omega0;
 	gamma = 0;
 #ifdef GRAV
@@ -411,6 +415,11 @@ readdouble(inifile);
 #endif
 			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = 0.0;// BaryU(i, j, k);
+#ifdef ISOWALL // Add isolated wall potential as an effective baryonic potential
+			if (r >= r0){
+			phiBary(i,j,k) = isowallpot;
+			}
+#endif
 			
 #else
 			psi(i, j, k) = complex<Float>(fermi(mu, i, j, k), 0);
@@ -691,7 +700,7 @@ if (imagt){
 }
 
 //*********************************************************************
-// Initial state
+// Initial TF density profile
 //*********************************************************************
 Float init(int i, int j, int k)		
 {
@@ -709,11 +718,11 @@ Float init(int i, int j, int k)
 //	if (r < R) F = (Float)N * 27 / 8 / pi * SQ(log((r > 0 ? r : .5 * dx) / R))
 //					/ (4 * pi * R * R * R / 3);
 
-	if (r > 0 && r<R) F = SQ(sin(pi*r / R) / (pi*r / R));
+	if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
 	else if (r == 0) F = 1;
 	else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
+	F = (Float)rho0 * pow(F, 1);
 	return F;
 }
 
