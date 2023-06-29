@@ -9,6 +9,9 @@ phi-test: phi-interpolator.c++ phi-interpolator.h parameters3.h phi-test.c++
 newbec3pc: bec3p.c++ parameters3.h
 	c++ -O3 -std=c++11 bec3p.c++ -o bec3pc
 
+largebec3pc: bec3plarge.c++ parameters3large.h
+	c++ -O3 -std=c++11 bec3plarge.c++ -o bec3pclarge
+
 phitest: Test_Phi.c++ parameters3.h
 	c++ -O3 Test_Phi.c++ -o Test_Phi
 
