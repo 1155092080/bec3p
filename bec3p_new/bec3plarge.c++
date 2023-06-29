@@ -176,9 +176,9 @@ fflush(stdout);
 
     // Fixed grad parameters for large part
 
-    dxl = (xll - xl) / Nxl;
-	dyl = (yll - yl) / Nyl;
-	dzl = (zll - zl) / Nzl;
+    dxl = (xl - xll) / Nxl;
+	dyl = (yl - yll) / Nyl;
+	dzl = (zl - zll) / Nzl;
 
 	idxl2 = 1 / dxl / dxl;
 	idyl2 = 1 / dyl / dyl;

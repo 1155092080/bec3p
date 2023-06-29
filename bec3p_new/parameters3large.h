@@ -29,20 +29,18 @@ const Float pi = 4 * atan((Float)1);
 //#define REALTIME
 // Consider Isothermal EOS?
 #define ISOTHERMAL
-// Use a larger grid?
-#define LargeGrid
 // Grid size
-#define Nx 230//120
-#define Ny 230//120
-#define Nz 230//120
+#define Nx 228//120
+#define Ny 228//120
+#define Nz 228//120
 #define Nxf 180//120
 #define Nyf 180//120
 #define Nzf 180//120
-#define Nxl 25//120
-#define Nyl 25//120
-#define Nzl 25//120
+#define Nxl 24//120
+#define Nyl 24//120
+#define Nzl 24//120
 
-std::string prefix = "./no_bary/omega0/";
+std::string prefix = "./large_test/omega0/";
 std:: string inifile = "./no_bary/omega0/psi_phi.dat";
 
 
@@ -53,7 +51,7 @@ const Float xrl = 1000.0f, yrl = 1000.0f, zrl = 1000.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.01;//10;					// Time step (units of [T])
+const Float tau = 0.001;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
