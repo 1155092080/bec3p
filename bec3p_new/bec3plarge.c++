@@ -1383,15 +1383,15 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 							(res(i, j, k - 1) + res(i, j, k + 1)) * idz2 -
 							G4pi * density(i, j, k)) * h2;
 #endif
-			rtot1 += phi(i, j, k);
 		}
 					else{
 			phi(i, j, k) = ((res(i - 1, j, k) + res(i + 1, j, k)) * idxl2 +
 							(res(i, j - 1, k) + res(i, j + 1, k)) * idyl2 +
 							(res(i, j, k - 1) + res(i, j, k + 1)) * idzl2 -
 							G4pi * density(i, j, k)) * h2l;
-			rtot1 += phi(i, j, k);
-		}}
+		}
+				rtot1 += phi(i, j, k);
+				}
 	}
 
 #ifdef SHOW_LOOPS
