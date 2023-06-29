@@ -29,6 +29,8 @@ const Float pi = 4 * atan((Float)1);
 //#define REALTIME
 // Consider Isothermal EOS?
 #define ISOTHERMAL
+// Show loops?
+#define SHOW_LOOPS
 // Grid size
 #define Nx 228//120
 #define Ny 228//120
