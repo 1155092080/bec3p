@@ -428,8 +428,6 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
-			cout << norm1 <<endl;
-			cout << norm <<endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "X", nrmc);
 			norm = norm1;
@@ -785,7 +783,7 @@ void get_U(Float mu)	// Find U
 			for (i = 0; i <= Nx; i++)
 		U(i, j, k) = c * density(i, j, k) + phiU(i, j, k) - mu
 #ifdef ISOTHERMAL
-		+ kbT * log(density(i, j, k))
+		+ kbT * log(density(i, j, k)+1e-20)
 #endif
 		;
 }
