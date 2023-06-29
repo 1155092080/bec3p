@@ -428,6 +428,8 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
+			cout << norm1 <<endl;
+			cout << norm <<endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "X", nrmc);
 			norm = norm1;
@@ -846,6 +848,7 @@ void calc_rhs_x(complex<Float> foo1,	// Find psi_n= Rx(psi)
 	{
 		y = ygrid[j];
 		for (k = 1; k < Nz; k++)
+		{
 		if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)		
 		{
 			foo2 = foo1 * y;
@@ -859,6 +862,7 @@ void calc_rhs_x(complex<Float> foo1,	// Find psi_n= Rx(psi)
 			psi_n(i, j, k) = (foo3l - foo2) * psi(i - 1, j, k) +
 							 (foo5l - foo4l * U(i, j, k)) * psi(i, j, k) +
 							 (foo3l + foo2) * psi(i + 1, j, k);
+		}
 		}
 	}
 }
@@ -882,6 +886,7 @@ void calc_rhs_y(complex<Float> foo1,	// Find psi_n= Ry(psi)
 		x = xgrid[i];
 		for (j = 1; j < Ny; j++)
 			for (k = 1; k < Nz; k++)
+			{
 			if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)
 		{
 			foo2 = foo1 * x;
@@ -889,12 +894,13 @@ void calc_rhs_y(complex<Float> foo1,	// Find psi_n= Ry(psi)
 							 (foo5 - foo4 * U(i, j, k)) * psi(i, j, k) +
 							 (foo3 - foo2) * psi(i, j + 1, k);
 		}
-		else{
+			else{
 			foo2 = foo1l * x;
 			psi_n(i, j, k) = (foo3l + foo2) * psi(i - 1, j, k) +
 							 (foo5l - foo4l * U(i, j, k)) * psi(i, j, k) +
 							 (foo3l - foo2) * psi(i + 1, j, k);
 		}
+			}
 	}
 }
 
@@ -913,17 +919,19 @@ void calc_rhs_z(complex<Float> foo3,	// Find psi_n=Ry(psi)
 	for (i = 1; i < Nx; i++)
 		for (j = 1; j < Ny; j++)
 			for (k = 1; k < Nz; k++)
+			{
 			if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)
 		{
 			psi_n(i, j, k) = foo3 * psi(i, j, k - 1) +
 						 (foo5 - foo4 * U(i, j, k)) * psi(i, j, k) +
 						 foo3 * psi(i, j, k + 1);
 		}
-		else{
+			else{
 			psi_n(i, j, k) = foo3l * psi(i, j, k - 1) +
 						 (foo5l - foo4l * U(i, j, k)) * psi(i, j, k) +
 						 foo3l * psi(i, j, k + 1);
 		}
+			}
 }
 
 //**********************************************************************
@@ -1038,13 +1046,13 @@ void get_cond(Float &x2, Float &y2, Float &alpha1,	// Find the mean values
 	elz = 0.0;
 	l = complex<Float>(0, 0);
 
-	for (i = 0; i <= Nx; i++)
+	for (i = Nxl; i <= Nxl+Nxf; i++)
 	{
 		x = xgrid[i];
-		for (j = 0; j <= Ny; j++)
+		for (j = Nyl; j <= Nyl+Nyf; j++)
 		{
 			y = ygrid[j];
-			for (k = 0; k <= Nz; k++)
+			for (k = Nzl; k <= Nzl+Nzf; k++)
 			{
 				x2 += x * x * (SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k))));
 				y2 += y * y * (SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k))));
@@ -1102,6 +1110,7 @@ Float get_normsimp()	// Find the norm using Simpson's rule
 		normzl[i][j] = SQ(real(psi(i, j, 0))) + SQ(real(psi(i, j, 2*Nzl+Nzf-1)))+
 					SQ(imag(psi(i, j, 0))) + SQ(imag(psi(i, j, 2*Nzl+Nzf-1))); // Boundary index for outer box is 0~2*Nzl+Nzf
 		for (k = 1; k <= 2*Nzl+Nzf-3; k += 2) // third index from 1 to 2*Nzl+Nzf-2
+			{
 			if (Nzl+1<=k && k<=Nzl+Nzf-3) // third index from Nzl+1 to Nzl+Nzf-2
 			normz[i][j] += 4 * (SQ(real(psi(i, j, k))) +
 								SQ(imag(psi(i, j, k)))) +
@@ -1112,28 +1121,34 @@ Float get_normsimp()	// Find the norm using Simpson's rule
 								SQ(imag(psi(i, j, k)))) +
 						    (SQ(real(psi(i, j, k + 1))) +
 								SQ(imag(psi(i, j, k + 1))));
+			}
 	}
 	for (i = 0; i <=Ny; i++)
 	{
 		normy[i] = normz[i][Nyl] + normz[i][Nyl+Nyf-1];
 		normyl[i] = normzl[i][0] + normzl[i][2*Nyl+Nyf-1];
 		for (j = 1; j <= 2*Nyl+Nyf-3; j += 2)
+		{
 		if (Nyl+1<=j && j<=Nyl+Nyf-3){
 			normy[i] += 4 * normz[i][j] + 2 * normz[i][j + 1];
 		}
 		else{
 			normyl[i] += normzl[i][j] + normzl[i][j + 1];
 		}
+		}
+		
 	}
 
 	norm = normy[Nxl] + normy[Nxl+Nxf-1];
 	norml = normyl[0] + normyl[2*Nxl+Nxf-1];
 	for (i = 1; i <= 2*Nxl+Nxf - 3; i += 2)
+	{
 	if (Nxl+1<=i && i<=Nxl+Nxf-3){
 		norm += 4 * normy[i] + 2 * normy[i + 1];
 	}
 	else{
 		norml += normyl[i] + normyl[i + 1];
+	}
 	}
 	norm *= dx * dy * dz / 27;
 	norml *= dxl * dyl * dzl;
@@ -1336,6 +1351,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		for (k = 1; k < Nz; k++)
 			for (j = 1; j < Ny; j++)
 				for (i = 1; i < Nx; i++)
+				{
 				if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)
 				{
 					res(i, j, k) = ((phi(i - 1, j, k) + phi(i + 1, j, k)) * idx2 +
@@ -1349,6 +1365,8 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 									(phi(i, j, k - 1) + phi(i, j, k + 1)) * idzl2 -
 									G4pi * density(i, j, k)) * h2l;
 				}
+
+				}
 #else
 		get_phi_kernel(true, G4pi, idx2, idy2, idz2, h2);
 		get_phi_kernel(false, G4pi, idx2, idy2, idz2, h2);
@@ -1356,7 +1374,8 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		for (k = 1; k < Nz; k++)
 			for (j = 1; j < Ny; j++)
 				for (i = 1; i < Nx; i++)
-				if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)
+				{				
+					if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)
 		{
 #ifndef USECL
 			phi(i, j, k) = ((res(i - 1, j, k) + res(i + 1, j, k)) * idx2 +
@@ -1366,13 +1385,13 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 #endif
 			rtot1 += phi(i, j, k);
 		}
-		else{
+					else{
 			phi(i, j, k) = ((res(i - 1, j, k) + res(i + 1, j, k)) * idxl2 +
 							(res(i, j - 1, k) + res(i, j + 1, k)) * idyl2 +
 							(res(i, j, k - 1) + res(i, j, k + 1)) * idzl2 -
 							G4pi * density(i, j, k)) * h2l;
 			rtot1 += phi(i, j, k);
-		}
+		}}
 	}
 
 #ifdef SHOW_LOOPS

@@ -32,15 +32,15 @@ const Float pi = 4 * atan((Float)1);
 // Show loops?
 #define SHOW_LOOPS
 // Grid size
-#define Nx 228//120
-#define Ny 228//120
-#define Nz 228//120
-#define Nxf 180//120
-#define Nyf 180//120
-#define Nzf 180//120
-#define Nxl 24//120
-#define Nyl 24//120
-#define Nzl 24//120
+#define Nx 140//120
+#define Ny 140//120
+#define Nz 140//120
+#define Nxf 120//120
+#define Nyf 120//120
+#define Nzf 120//120
+#define Nxl 10//120
+#define Nyl 10//120
+#define Nzl 10//120
 
 std::string prefix = "./large_test/omega0/";
 std:: string inifile = "./no_bary/omega0/psi_phi.dat";
