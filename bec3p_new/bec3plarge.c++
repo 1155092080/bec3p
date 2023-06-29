@@ -1012,16 +1012,16 @@ void solve_z(complex<Float> foo1,	// Solve Ly(psi)=psi_n for psi
 	for (i = 1; i < Nx; i++)
 		for (j = 1; j < Ny; j++)
 	{
-		for (k = 2; k < Nz; k++)
+		for (k = 1; k < Nz; k++)
 		{
 			if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf){
 				l[k] = u[k] = foo1;
-				d[k] = d[1] + foo4 * U(i, j, k);
+				d[k] = foo3 + foo4 * U(i, j, k);
 				r[k] = psi_n(i, j, k);
 			}
 			else{
 				l[k] = u[k] = foo1l;
-				d[k] = d[1] + foo4l * U(i, j, k);
+				d[k] = foo3l + foo4l * U(i, j, k);
 				r[k] = psi_n(i, j, k);
 			}
 		}
