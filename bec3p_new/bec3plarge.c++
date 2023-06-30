@@ -510,7 +510,7 @@ if (imagt){
 			// fflush(stdout);
 			}
 		E0 = energy(mu, fileerg);
-		printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", itime, t, E0, norm);
+		printf("N=%6d, t=%11.4lg, E=%11.4lg, Erel=%11.4lg, P=%11.4lg\n", itime, t, E0, fabs((E0-E1)/E0), norm);
 		fflush(stdout);
 
 		if (itime > 0 && itime % nstep1 == 0)
@@ -552,7 +552,7 @@ if (imagt){
 
 		if (real(dt) < 1e-15)
 		{
-			cout << "Energy Relerr: " << fabs((E0 - E1)/E0) << " " << E0 << endl;
+			//cout << "Energy Relerr: " << fabs((E0 - E1)/E0) << " " << E0 << endl;
 			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
 				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
 			{
