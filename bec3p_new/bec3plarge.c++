@@ -22,10 +22,10 @@ using namespace std;
 using std::string;
 const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
 
-#define NRMN 100
-#define NRMC 1000
-#define NRMP 10000
-#define NTOL 1e-7
+#define NRMN 100 // Check recent NRMN iterations to see if the loop is oscillatory
+#define NRMC 1000 // Maximum iterations for each direction evolution
+#define NRMP 10000 // Maximum iterations for Poisson evolution
+#define NTOL 1e-7 // Relative error of oscillatory loop checking. Should be smaller or equal to tolGPE
 
 complex<Float> eye, dt;
 Float t, dx, dy, dz, idx2, idy2, idz2, dxl, dyl, dzl, idxl2, idyl2, idzl2;
@@ -98,16 +98,16 @@ void readdouble(std::string file);
 void loopdetect(Float *nrma, Float norm, const char *pdir, int &nrmc)
 {
 	int i, j;
-	int nrmn = nrmc++;
+	int nrmn = nrmc++; // Current iteration number
 
-	if (nrmc > NRMC)
+	if (nrmc > NRMC) // If current iteration number exceeds the maximum, exit and show divergence
 	{
 		fprintf(stderr, "No convergence after %d "
 				 "iterations in the %s direction.\n", nrmc, pdir);
 		exit(1);
 	}
 
-	if (nrmn >= NRMN)
+	if (nrmn >= NRMN) // If current iteration number exceeds the nrma memory, shift the array
 	{
 		memmove(nrma, &(nrma[1]), sizeof(nrma) - sizeof(nrma[0]));
 		nrmn = NRMN - 1;
@@ -331,17 +331,17 @@ readdouble(inifile);
 	}
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
-	for (i = 0; i <= Nx; i++)
-	{
-		for (j = 0; j <= Ny; j++)
-			for (k = 0; k <= Nz; k++)
-			{
-				psi(i, j, k) *= renorm;
-				fprintf(fileini, "%e %e %e %e %e %e\n", xgrid[i], ygrid[j], zgrid[k], real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
-			}	
-			fprintf(fileini, "\n");	// For Gnuplot		
-	}
-	fclose(fileini);	
+	// for (i = 0; i <= Nx; i++)
+	// {
+	// 	for (j = 0; j <= Ny; j++)
+	// 		for (k = 0; k <= Nz; k++)
+	// 		{
+	// 			psi(i, j, k) *= renorm;
+	// 			fprintf(fileini, "%e %e %e %e %e %e\n", xgrid[i], ygrid[j], zgrid[k], real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+	// 		}	
+	// 		fprintf(fileini, "\n");	// For Gnuplot		
+	// }
+	// fclose(fileini);	
 	norm_ini = get_normsimp();
 	printf("Initial norm is P=%11.4lg\n", norm_ini);
 	fflush(stdout);
@@ -378,10 +378,33 @@ fflush(stdout);
 
 #ifdef GRAV
 	get_phi();
+	// filepath = path + "psi_phi.dat";
+	// file_current = fopen(filepath.c_str(), "w");
+
+	// for (i = 0; i <= Nx; i++)
+	// {
+	// 	for (j = 0; j <= Ny; j++)
+	// 		for (k = 0; k <= Nz; k++)
+	// 		{
+	// 			fprintf(file_current, "%e %e %e %e %e %e\n", xgrid[i],ygrid[j],zgrid[k], real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+	// 		}	
+	// 		fprintf(file_current, "\n");	// For Gnuplot		
+	// }
+	// fclose(file_current);
 #else
 	get_Vtr();
 #endif
-
+	for (i = 0; i <= Nx; i++)
+	{
+		for (j = 0; j <= Ny; j++)
+			for (k = 0; k <= Nz; k++)
+			{
+				psi(i, j, k) *= renorm;
+				fprintf(fileini, "%e %e %e %e %e %e\n", xgrid[i], ygrid[j], zgrid[k], real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+			}	
+			fprintf(fileini, "\n");	// For Gnuplot		
+	}
+	fclose(fileini);
 printf("Initiate the iteration...\n");
 fflush(stdout);
 
