@@ -24,36 +24,36 @@ const Float pi = 4 * atan((Float)1);
 // Self-gravitating or trapped condensate?
 #define GRAV
 #define BARY
-//#define INIFILE
+#define INIFILE
 // Real-time or imaginary-time evolution?
 //#define REALTIME
 // Consider Isothermal EOS?
 #define ISOTHERMAL
 // Show loops?
-#define SHOW_LOOPS
+//#define SHOW_LOOPS
 // Grid size
-#define Nx 140//120
-#define Ny 140//120
-#define Nz 140//120
+#define Nx 160//120
+#define Ny 160//120
+#define Nz 160//120
 #define Nxf 120//120
 #define Nyf 120//120
 #define Nzf 120//120
-#define Nxl 10//120
-#define Nyl 10//120
-#define Nzl 10//120
+#define Nxl 20//120
+#define Nyl 20//120
+#define Nzl 20//120
 
-std::string prefix = "./large_test/omega0/";
-std:: string inifile = "./no_bary/omega0/psi_phi.dat";
+std::string prefix = "./large_test/checkpoi/";
+std:: string inifile = "./large_test/check/psi_ini.dat";
 
 
-const Float xl = -25.0f, yl = -25.0f, zl = -25.0f;
-const Float xr = 25.0f, yr = 25.0f, zr = 25.0f;
+const Float xl = -100.0f, yl = -100.0f, zl = -100.0f;
+const Float xr = 100.0f, yr = 100.0f, zr = 100.0f;
 const Float xll = -1000.0f, yll = -1000.0f, zll = -1000.0f;
 const Float xrl = 1000.0f, yrl = 1000.0f, zrl = 1000.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.001;//10;					// Time step (units of [T])
+const Float tau = 0.01;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
@@ -72,9 +72,9 @@ const Float gamma0 = 0.0;				// Softening parameter
 // const Float aho = 1.0;                // harmonic length (in [L])
 const Float omg = 1.587;                  // harmonic trap (in rad/[T])
 // Iteration tolerances
-const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
-const Float tolPSN = 5*1e-5;				// Poisson relaxation method iteration
-const Float tolREL = 1e-8;				// Imaginary time system relaxation
+const Float tolGPE = 1e-7;				// GPE nonlinear term iteration
+const Float tolPSN = 1e-5;				// Poisson relaxation method iteration
+const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output

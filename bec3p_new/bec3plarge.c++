@@ -116,6 +116,7 @@ void loopdetect(Float *nrma, Float norm, const char *pdir, int &nrmc)
 
 	for (i = nrmn - 1; i >= 0; i--)
 	{
+		//cout << "Loop detect " << fabs(norm-nrma[i]) <<endl;
 		if (fabs(norm - nrma[i]) < fabs(NTOL * norm))
 		{
 			fprintf(stderr, "Oscillatory loop in the %s direction is "
@@ -428,6 +429,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
+			// cout << "Normx Relerr: " << fabs((norm1 -  norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "X", nrmc);
 			norm = norm1;
@@ -447,6 +449,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
+			// cout <<"Normy Relerr: " <<  fabs((norm1-norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "Y", nrmc);
 			norm = norm1;
@@ -465,6 +468,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
+			// cout << "Normz Relerr: " << fabs((norm1-norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "Z", nrmc);
 			norm = norm1;
@@ -526,7 +530,7 @@ if (imagt){
 
 		if (real(dt) < 1e-15)
 		{
-
+			cout << "Energy Relerr: " << fabs((E0 - E1)/E0) << " " << E0 << endl;
 			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
 				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
 			{
@@ -621,25 +625,25 @@ if (imagt){
 //*********************************************************************
 Float init(int i, int j, int k)		
 {
-	Float F, x, y, z, r;
+	Float F, x, y, z, r, rh1, xrh1, rh2, xrh2;
 
 	x = xgrid[i];
 	y = ygrid[j];
 	z = zgrid[k];
 	r = sqrt((1 + ex) * x * x + (1 + ey) * y * y + (1 + ez) * z * z);
+	rh1 = 3e5;
+	xrh1 = r/0.707/rh1;
+	rh2 = 23;
+	xrh2 = r/0.707/rh2;
+	
 	F = 0.0;
-//	if (r < R) F = (Float)(N / 4 / pi / (r > 0 ? SQ(r) : SQ(.5 * dx)) / R);
 
-//	if (r < R) F = (Float)N * 27 / 8 / pi * SQ(log(r / R + 1e-29))
-
-//	if (r < R) F = (Float)N * 27 / 8 / pi * SQ(log((r > 0 ? r : .5 * dx) / R))
-//					/ (4 * pi * R * R * R / 3);
-
-	if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
-	else if (r == 0) F = 1;
-	else F = 0;
+	//if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
+	//else if (r == 0) F = 1;
+	//else F = 0;
 	// if (F <= 0) F = 0;
-	F = (Float)rho0 * pow(F, 1);
+	F = 1./(1.+3*SQ(xrh1))/1e10 + 1./pow(1.+3*SQ(xrh2),8);
+	F *= (Float)rho0;
 	return F;
 }
 
@@ -1390,6 +1394,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		}
 				rtot1 += phi(i, j, k);
 				}
+		cout << rtot2 << " " << rtot1 << " " << fabs(rtot1-rtot2) <<endl;
 	}
 
 #ifdef SHOW_LOOPS
