@@ -25,7 +25,7 @@ const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
 #define NRMN 100 // Check recent NRMN iterations to see if the loop is oscillatory
 #define NRMC 1000 // Maximum iterations for each direction evolution
 #define NRMP 10000 // Maximum iterations for Poisson evolution
-#define NTOL 1e-9 // Relative error of oscillatory loop checking. Should be smaller than tolGPE
+#define NTOL 1e-7 // Relative error of oscillatory loop checking. Should be smaller than tolGPE
 
 complex<Float> eye, dt;
 Float t, dx, dy, dz, idx2, idy2, idz2, dxl, dyl, dzl, idxl2, idyl2, idzl2;
@@ -451,7 +451,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
-			// cout << "Normx Relerr: " << fabs((norm1 -  norm)/norm) << " " << norm << endl;
+			//cout << "Normx Relerr: " << fabs((norm1 -  norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "X", nrmc);
 			norm = norm1;
@@ -471,7 +471,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
-			// cout <<"Normy Relerr: " <<  fabs((norm1-norm)/norm) << " " << norm << endl;
+			//cout <<"Normy Relerr: " <<  fabs((norm1-norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "Y", nrmc);
 			norm = norm1;
@@ -490,7 +490,7 @@ fflush(stdout);
 #endif
 			get_U(mu);
 			Float norm1 = get_normsimp();
-			// cout << "Normz Relerr: " << fabs((norm1-norm)/norm) << " " << norm << endl;
+			//cout << "Normz Relerr: " << fabs((norm1-norm)/norm) << " " << norm << endl;
 			if (fabs(norm1 - norm) < fabs(tolGPE * norm)) bLoop = false;
 			else loopdetect(nrma, norm1, "Z", nrmc);
 			norm = norm1;
@@ -1416,7 +1416,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		}
 				rtot1 += phi(i, j, k);
 				}
-		cout << rtot2 << " " << rtot1 << " " << fabs(rtot1-rtot2) <<endl;
+		//cout << rtot2 << " " << rtot1 << " " << fabs(rtot1-rtot2) <<endl;
 	}
 
 #ifdef SHOW_LOOPS

@@ -72,7 +72,7 @@ const Float gamma0 = 0.0;				// Softening parameter
 // const Float aho = 1.0;                // harmonic length (in [L])
 const Float omg = 1.587;                  // harmonic trap (in rad/[T])
 // Iteration tolerances
-const Float tolGPE = 1e-7;				// GPE nonlinear term iteration
+const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
 const Float tolPSN = 1e-5;				// Poisson relaxation method iteration
 const Float tolREL = 1e-6;				// Imaginary time system relaxation
 
