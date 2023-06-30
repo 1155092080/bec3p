@@ -24,7 +24,7 @@ const Float pi = 4 * atan((Float)1);
 // Self-gravitating or trapped condensate?
 #define GRAV
 #define BARY
-//#define INIFILE
+#define INIFILE
 // Real-time or imaginary-time evolution?
 //#define REALTIME
 // Consider Isothermal EOS?
@@ -42,8 +42,8 @@ const Float pi = 4 * atan((Float)1);
 #define Nyl 20//120
 #define Nzl 20//120
 
-std::string prefix = "./large_test/checkpoi/";
-std:: string inifile = "./large_test/check/psi_ini.dat";
+std::string prefix = "./large_test/check/";
+std:: string inifile = "./large_test/checkpoi/psi_ini.dat";
 
 
 const Float xl = -100.0f, yl = -100.0f, zl = -100.0f;
