@@ -25,7 +25,7 @@ const int Nn = (Nx + 1) * (Ny + 1) * (Nz + 1); // Number of total grid points
 #define NRMN 100 // Check recent NRMN iterations to see if the loop is oscillatory
 #define NRMC 1000 // Maximum iterations for each direction evolution
 #define NRMP 10000 // Maximum iterations for Poisson evolution
-#define NTOL 1e-7 // Relative error of oscillatory loop checking. Should be smaller or equal to tolGPE
+#define NTOL 1e-6 // Relative error of oscillatory loop checking. Should be larger than tolGPE
 
 complex<Float> eye, dt;
 Float t, dx, dy, dz, idx2, idy2, idz2, dxl, dyl, dzl, idxl2, idyl2, idzl2;
@@ -331,14 +331,14 @@ readdouble(inifile);
 	}
 	norm_ini = get_normsimp();
 	Float renorm = sqrt(N / norm_ini);
-	// for (i = 0; i <= Nx; i++)
-	// {
-	// 	for (j = 0; j <= Ny; j++)
-	// 		for (k = 0; k <= Nz; k++)
-	// 		{
-	// 			psi(i, j, k) *= renorm;
-	// 			fprintf(fileini, "%e %e %e %e %e %e\n", xgrid[i], ygrid[j], zgrid[k], real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
-	// 		}	
+	for (i = 0; i <= Nx; i++)
+	{
+		for (j = 0; j <= Ny; j++)
+			for (k = 0; k <= Nz; k++)
+			{
+				psi(i, j, k) *= renorm;
+			}
+	}	
 	// 		fprintf(fileini, "\n");	// For Gnuplot		
 	// }
 	// fclose(fileini);	

@@ -24,7 +24,7 @@ const Float pi = 4 * atan((Float)1);
 // Self-gravitating or trapped condensate?
 #define GRAV
 #define BARY
-#define INIFILE
+//#define INIFILE
 // Real-time or imaginary-time evolution?
 //#define REALTIME
 // Consider Isothermal EOS?
