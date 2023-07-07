@@ -3,13 +3,14 @@
 // This version dated 2013/08/05.
 
 #include "stdafx.h"
-
-
 #include "parameters3large.h"
-// #include "phi-interpolator.h"
 #include "mkpath.h"
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <limits>
+#include <cmath>
+
 #ifdef USECL
 #include <CL/opencl.h>
 #include <SDKCommon.hpp>
@@ -43,6 +44,8 @@ Float *phiBary = new Float[Nn];
 Float *xgrid = new Float[Nx + 1];
 Float *ygrid = new Float[Ny + 1];
 Float *zgrid = new Float[Nz + 1];
+vector<Float>r_interp;
+vector<Float>psi_interp;
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
@@ -92,7 +95,12 @@ void thomas(complex<Float> *, complex<Float> *, complex<Float> *,
 			complex<Float> *, int m);
 void get_density();
 void readdouble(std::string file);
-
+Float interpini(Float r);
+void readinterp(string file);
+template<typename T>
+int nearestNeighbourIndex(std::vector<T>& x, T& value);
+template<typename T>
+std::vector<T> interp1(std::vector<T>& x, std::vector<T>& y, std::vector<T>& x_new);
 
 //**********************************************************************
 void loopdetect(Float *nrma, Float norm, const char *pdir, int &nrmc)
@@ -256,7 +264,9 @@ fflush(stdout);
 	foo5Zl = (Float)1 - xi * dt * idzl2 / (Float)2;
 #ifdef INIFILE
 readdouble(inifile);
-
+#endif
+#ifdef INTERP
+readinterp(interpfile);
 #endif
 	// Initial state
 	filepath = path + "psi_ini.dat";
@@ -311,11 +321,15 @@ readdouble(inifile);
 			for (k = 0; k <= Nz; k++)
 		{
 #ifdef GRAV
-			Float rho = init(i, j, k);
 			Float x2 = SQ(xgrid[i]);
 			Float y2 = SQ(ygrid[j]);
 			Float z2 = SQ(zgrid[k]);
 			Float r = sqrt(x2 + y2 + z2);
+			#ifdef INTERP
+			Float rho = interpini(r);
+			#else
+			Float rho = init(i, j, k);
+			#endif
 #ifndef INIFILE
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = complex<Float>(sqrt(rho), 0);//complex initialization
@@ -659,14 +673,22 @@ Float init(int i, int j, int k)
 	xrh2 = r/0.707/rh2;
 	
 	F = 0.0;
-
-	//if (r > 0 && r<R) F = sin(pi*r / R) / (pi*r / R);
-	//else if (r == 0) F = 1;
-	//else F = 0;
-	// if (F <= 0) F = 0;
 	F = 1./(1.+3*SQ(xrh1))/1e10 + 1./pow(1.+3*SQ(xrh2),8);
 	F *= (Float)rho0;
+
+
 	return F;
+}
+
+//*********************************************************************
+// Initial interpolated density profile
+//*********************************************************************
+Float interpini(Float r)		
+{
+	vector<Float> newx{r};
+	vector<Float> res = interp1(r_interp, psi_interp, newx);
+
+	return res[0];
 }
 
 //*********************************************************************
@@ -1453,4 +1475,82 @@ void get_density()
 		for (j = 0; j <= Ny; j++)
 			for (k = 0; k <= Nz; k++)
 				density(i, j, k) = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
+}
+
+void readinterp(string file){
+    Float *f_r = new Float[Nf];
+    Float *f_psi = new Float[Nf];
+    ifstream ifs(file, ios::in); // opening the file
+    if (!ifs.is_open())
+    {
+        cout << "open interp file fail!" << endl;
+    } 
+    else
+    {
+        cout << "open interp file successful!" << endl;
+        for (int i = 0; i < Nf; i++)
+        {
+            ifs >> f_r[i] >> f_psi[i];
+        }
+        ifs.close();
+        cout << "Finished reading interp file! Number of entries: " << Nf << endl;
+    }
+    for (int i = 0; i <= Nf; i++)
+	{
+        r_interp[i] = f_r[i];
+        psi_interp[i] = f_psi[i];
+    }
+}
+
+template<typename T>
+int nearestNeighbourIndex(std::vector<T>& x, T& value)
+{
+    T dist = std::numeric_limits<T>::max();
+    T newDist = dist;
+    size_t idx = 0;
+
+    for (size_t i = 0; i < x.size(); ++i) {
+        newDist = std::abs(value - x[i]);
+        if (newDist <= dist) {
+            dist = newDist;
+            idx = i;
+        }
+    }
+
+    return idx;
+}
+
+
+template<typename T>
+std::vector<T> interp1(std::vector<T>& x, std::vector<T>& y, std::vector<T>& x_new)
+{
+    std::vector<T> y_new;
+    T dx, dy, m, b;
+    size_t x_max_idx = x.size() - 1;
+    size_t x_new_size = x_new.size();
+
+    y_new.reserve(x_new_size);
+
+    for (size_t i = 0; i < x_new_size; ++i)
+    {
+        size_t idx = nearestNeighbourIndex(x, x_new[i]);
+
+        if (x[idx] > x_new[i])
+        {
+            dx = idx > 0 ? (x[idx] - x[idx - 1]) : (x[idx + 1] - x[idx]);
+            dy = idx > 0 ? (y[idx] - y[idx - 1]) : (y[idx + 1] - y[idx]);
+        }
+        else
+        {
+            dx = idx < x_max_idx ? (x[idx + 1] - x[idx]) : (x[idx] - x[idx - 1]);
+            dy = idx < x_max_idx ? (y[idx + 1] - y[idx]) : (y[idx] - y[idx - 1]);
+        }
+
+        m = dy / dx;
+        b = y[idx] - x[idx] * m;
+
+        y_new.push_back(x_new[i] * m + b);
+    }
+
+    return y_new;
 }
