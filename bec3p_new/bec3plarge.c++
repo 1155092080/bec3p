@@ -748,8 +748,8 @@ void readinterp(string file){
     }
     for (int i = 0; i <= Nf; i++)
 	{
-        r_interp[i] = f_r[i];
-        psi_interp[i] = f_psi[i];
+        r_interp.push_back(f_r[i]);
+        psi_interp.push_back(f_psi[i]);
 		cout << r_interp[i] << " " << psi_interp[i] << endl;
     }
 }
