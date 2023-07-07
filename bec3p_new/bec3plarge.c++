@@ -343,7 +343,23 @@ readinterp(interpfile);
 			
 		}		
 	}
-	printf("Setting up boundary conditions...\n");
+	norm_ini = get_normsimp();
+	Float renorm = sqrt(N / norm_ini);
+	for (i = 0; i <= Nx; i++)
+	{
+		for (j = 0; j <= Ny; j++)
+			for (k = 0; k <= Nz; k++)
+			{
+				psi(i, j, k) *= renorm;
+			}
+	}	
+	// 		fprintf(fileini, "\n");	// For Gnuplot		
+	// }
+	// fclose(fileini);	
+	norm_ini = get_normsimp();
+	printf("Initial norm is P=%11.4lg\n", norm_ini);
+	fflush(stdout);
+printf("Setting up boundary conditions...\n");
 fflush(stdout);
 
 	// Boundary conditions psi=0
@@ -366,27 +382,6 @@ fflush(stdout);
 		psi(i, Ny, k) = 0;
 	}
 
-	// Fix the value at r = 0 if using interpini profile
-#ifdef INTERP
-	psi(0, 0, 0) = complex<Float>(1, 0);
-#endif
-
- 	// Normalize
-	norm_ini = get_normsimp();
-	Float renorm = sqrt(N / norm_ini);
-	for (i = 0; i <= Nx; i++)
-	{
-		for (j = 0; j <= Ny; j++)
-			for (k = 0; k <= Nz; k++)
-			{
-				psi(i, j, k) *= renorm;
-			}
-	}	
-
-	norm_ini = get_normsimp();
-	printf("Initial norm is P=%11.4lg\n", norm_ini);
-	fflush(stdout);
-
 printf("Setting up initial density...\n");
 fflush(stdout);
 
@@ -396,7 +391,7 @@ printf("Setting up initial potential...\n");
 fflush(stdout);
 
 #ifdef GRAV
-	get_phi();
+	//get_phi();
 	// filepath = path + "psi_phi.dat";
 	// file_current = fopen(filepath.c_str(), "w");
 
@@ -751,7 +746,7 @@ void readinterp(string file){
         ifs.close();
         cout << "Finished reading interp file! Number of entries: " << Nf << endl;
     }
-    for (int i = 0; i <= Nf; i++)
+    for (int i = 0; i < Nf; i++)
 	{
         r_interp.push_back(f_r[i]);
         psi_interp.push_back(f_psi[i]);

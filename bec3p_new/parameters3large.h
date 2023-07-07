@@ -43,7 +43,7 @@ const Float pi = 4 * atan((Float)1);
 #define Nxl 20//120
 #define Nyl 20//120
 #define Nzl 20//120
-#define Nf 100
+#define Nf 500
 
 std::string prefix = "./large_test/debug/";
 std:: string inifile = "./large_test/checkpoi/psi_ini.dat";
