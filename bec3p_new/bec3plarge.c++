@@ -728,6 +728,32 @@ void readdouble(string file){
 
 }
 
+void readinterp(string file){
+    Float *f_r = new Float[Nf];
+    Float *f_psi = new Float[Nf];
+    ifstream ifs(file, ios::in); // opening the file
+    if (!ifs.is_open())
+    {
+        cout << "open interp file fail!" << endl;
+    } 
+    else
+    {
+        cout << "open interp file successful!" << endl;
+        for (int i = 0; i < Nf; i++)
+        {
+            ifs >> f_r[i] >> f_psi[i];
+        }
+        ifs.close();
+        cout << "Finished reading interp file! Number of entries: " << Nf << endl;
+    }
+    for (int i = 0; i <= Nf; i++)
+	{
+        r_interp[i] = f_r[i];
+        psi_interp[i] = f_psi[i];
+		cout << r_interp[i] << " " << psi_interp[i] << endl;
+    }
+}
+
 //*********************************************************************
 // Initial guess of DM gravitational potential from a homogeneous 
 // density profile
@@ -1475,31 +1501,6 @@ void get_density()
 		for (j = 0; j <= Ny; j++)
 			for (k = 0; k <= Nz; k++)
 				density(i, j, k) = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
-}
-
-void readinterp(string file){
-    Float *f_r = new Float[Nf];
-    Float *f_psi = new Float[Nf];
-    ifstream ifs(file, ios::in); // opening the file
-    if (!ifs.is_open())
-    {
-        cout << "open interp file fail!" << endl;
-    } 
-    else
-    {
-        cout << "open interp file successful!" << endl;
-        for (int i = 0; i < Nf; i++)
-        {
-            ifs >> f_r[i] >> f_psi[i];
-        }
-        ifs.close();
-        cout << "Finished reading interp file! Number of entries: " << Nf << endl;
-    }
-    for (int i = 0; i <= Nf; i++)
-	{
-        r_interp[i] = f_r[i];
-        psi_interp[i] = f_psi[i];
-    }
 }
 
 template<typename T>

@@ -45,7 +45,7 @@ const Float pi = 4 * atan((Float)1);
 #define Nzl 20//120
 #define Nf 100
 
-std::string prefix = "./large_test/check/";
+std::string prefix = "./large_test/debug/";
 std:: string inifile = "./large_test/checkpoi/psi_ini.dat";
 std:: string interpfile = "./testdat.dat";
 
