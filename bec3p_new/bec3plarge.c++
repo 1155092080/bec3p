@@ -366,20 +366,20 @@ fflush(stdout);
 	for (i = 0; i <= Nx; i++)
 		for (j = 0; j <= Ny; j++)
 	{
-		psi(i, j, 0) = 0;
-		psi(i, j, Nz) = 0;
+		psi(i, j, 0) = 3.16e-6;
+		psi(i, j, Nz) = 3.16e-6;
 	}
 	for (j = 0; j <= Ny; j++)
 		for (k = 0; k <= Nz; k++)
 	{
-		psi(0, j, k) = 0;
-		psi(Nx, j, k) = 0;
+		psi(0, j, k) = 3.16e-6;
+		psi(Nx, j, k) = 3.16e-6;
 	}
 	for (k = 0; k <= Nz; k++)
 		for (i = 0; i <= Nx; i++)
 	{
-		psi(i, 0, k) = 0;
-		psi(i, Ny, k) = 0;
+		psi(i, 0, k) = 3.16e-6;
+		psi(i, Ny, k) = 3.16e-6;
 	}
 
 printf("Setting up initial density...\n");
@@ -515,9 +515,9 @@ fflush(stdout);
 #endif
 if (imagt){
 			Float renorm = sqrt(N / norm);
-			for (i = 0; i <= Nx; i++)
-				for (j = 0; j <= Ny; j++)
-					for (k = 0; k <= Nz; k++)
+			for (i = 1; i < Nx; i++)
+				for (j = 1; j < Ny; j++)
+					for (k = 1; k < Nz; k++)
 				psi(i, j, k) *= renorm;
 			// norm = get_normsimp();
 			// printf("Checking at N=%6d, t=%11.4lg, P=%11.4lg\n", itime, t, norm);
@@ -675,7 +675,10 @@ Float init(int i, int j, int k)
 	F = 0.0;
 	F = 1./(1.+3*SQ(xrh1))/1e10 + 1./pow(1.+3*SQ(xrh2),8);
 	F *= (Float)rho0;
-
+	// if (r > 0) F = sin(pi*r / R) / (pi*r / R);
+	// else if (r == 0) F = 1;
+	// if (F <= 0) F = 0;
+	// else F = (Float)N * pow(F, 1) / (4 * pi * R * R * R / 3);
 
 	return F;
 }
@@ -815,9 +818,9 @@ Float energy(Float mu, FILE *fileerg)
 	const static Float dV = dx * dy * dz;
 
 	EK = EU = EI = EG = 0;
-	for (k = Nzl+1; k < Nzl+Nzf; k++)
-		for (j = Nyl+1; j < Nyl+Nyf; j++)
-			for (i = Nxl+1; i < Nxl+Nxf; i++)
+	for (k = Nzl; k < Nzl+Nzf; k++)
+		for (j = Nyl; j < Nyl+Nyf; j++)
+			for (i = Nxl; i < Nxl+Nxf; i++)
 	{
 		mdpsisq = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k))); // density rho
 		EI += SQ(mdpsisq); // rho^2
@@ -857,7 +860,7 @@ void get_U(Float mu)	// Find U
 			for (i = 0; i <= Nx; i++)
 		U(i, j, k) = c * density(i, j, k) + phiU(i, j, k) - mu
 #ifdef ISOTHERMAL
-		+ kbT * log(density(i, j, k)+1e-20)
+		+ kbT * log(density(i, j, k))
 #endif
 		;
 }
@@ -1258,7 +1261,7 @@ void movieZ(int itime)	// Outputs files
 			z = zgrid[k];
 			depsi = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
 			phpsi = atan2(imag(psi(i, j, k)) + 1e-15f, real(psi(i, j, k)));
-			fprintf(file8, "%lf %lf %lf %lg\n", x, y, z, depsi);
+			fprintf(file8, "%lf %lf %lf %lg %lg\n", x, y, z, depsi, phi(i, j, k));
 			fprintf(file11, "%lf %lf %lf %lg\n", x, y, z, phiU(i, j, k));
 			fprintf(file10, "%lf %lf %lf %lg\n", x, y, z, phpsi);
 		}
@@ -1303,7 +1306,7 @@ void movieX(int itime)	// Outputs files
 			z = zgrid[k];
 			depsi = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
 			phpsi = atan2(imag(psi(i, j, k)) + 1e-15f, real(psi(i, j, k)));
-			fprintf(file8, "%lf %lf %lf %lg\n", x, y, z, depsi);
+			fprintf(file8, "%lf %lf %lf %lg %lg\n", x, y, z, depsi, phi(i, j, k));
 			fprintf(file11, "%lf %lf %lf %lg\n", x, y, z, phi(i, j, k));
 			fprintf(file10, "%lf %lf %lf %lg\n", x, y, z, phpsi);
 		}
@@ -1348,7 +1351,7 @@ void movieY(int itime)	// Outputs files
 			z = zgrid[k];
 			depsi = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
 			phpsi = atan2(imag(psi(i, j, k)) + 1e-15f, real(psi(i, j, k)));
-			fprintf(file8, "%lf %lf %lf %lg\n", x, y, z, depsi);
+			fprintf(file8, "%lf %lf %lf %lg %lg\n", x, y, z, depsi, phi(i, j, k));
 			fprintf(file11, "%lf %lf %lf %lg\n", x, y, z, phi(i, j, k));
 			fprintf(file10, "%lf %lf %lf %lg\n", x, y, z, phpsi);
 		}
@@ -1365,8 +1368,8 @@ void movieY(int itime)	// Outputs files
 //**********************************************************************
 void movie(int itime)
 {
-	// movieZ(itime);
-	movieX(itime);
+	movieZ(itime);
+	// movieX(itime);
 	// movieY(itime);
 }
 
@@ -1464,7 +1467,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		}
 				rtot1 += phi(i, j, k);
 				}
-		//cout << rtot2 << " " << rtot1 << " " << fabs(rtot1-rtot2) <<endl;
+		//cout << rtot2 << " " << rtot1 << " " << fabs(rtot1-rtot2)/rtot1 <<endl;
 	}
 
 #ifdef SHOW_LOOPS
