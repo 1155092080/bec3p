@@ -860,7 +860,7 @@ void get_U(Float mu)	// Find U
 			for (i = 0; i <= Nx; i++)
 		U(i, j, k) = c * density(i, j, k) + phiU(i, j, k) - mu
 #ifdef ISOTHERMAL
-		+ kbT * log(density(i, j, k))
+		+ kbT * log(density(i, j, k)/density(0, 0, 0)) //Normalisation to central density
 #endif
 		;
 }
