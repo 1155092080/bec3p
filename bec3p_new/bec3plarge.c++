@@ -391,7 +391,7 @@ printf("Setting up initial potential...\n");
 fflush(stdout);
 
 #ifdef GRAV
-	//get_phi();
+	get_phi();
 	// filepath = path + "psi_phi.dat";
 	// file_current = fopen(filepath.c_str(), "w");
 
@@ -567,8 +567,9 @@ if (imagt){
 		if (real(dt) < 1e-15)
 		{
 			//cout << "Energy Relerr: " << fabs((E0 - E1)/E0) << " " << E0 << endl;
-			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
-				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
+			// if (fabs(E0 - E1) < tolREL * fabs(E0) &&
+			// 	fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
+			if (fabs(norm - norm0) < tolREL * fabs(norm))
 			{
 				filepath = path + "psi_phi_ground.dat";
 				file_current = fopen(filepath.c_str(), "w");
@@ -632,6 +633,7 @@ if (imagt){
 			{
 				E2 = E1;
 				E1 = E0;
+				norm0 = norm;
 				ktime++;
 			}
 
