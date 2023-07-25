@@ -524,7 +524,7 @@ if (imagt){
 			// fflush(stdout);
 			}
 		E0 = energy(mu, fileerg);
-		printf("N=%6d, t=%11.4lg, E=%11.4lg, Erel=%11.4lg, P=%11.4lg\n", itime, t, E0, fabs((E0-E1)/E0), norm);
+		printf("N=%6d, t=%11.4lg, E=%11.4lg, Erel=%11.4lg, Prel=%11.4lg, P=%11.4lg\n", itime, t, E0, fabs((E0-E1)/E0), fabs((norm - norm0)/norm0), norm);
 		fflush(stdout);
 
 		if (itime > 0 && itime % nstep1 == 0)
