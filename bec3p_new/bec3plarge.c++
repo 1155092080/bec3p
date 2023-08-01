@@ -929,9 +929,9 @@ void calc_rhs_x(complex<Float> foo1,	// Find psi_n= Rx(psi)
 		if (Nxl<i && i<Nxl+Nxf && Nyl<j && j<Nyl+Nyf && Nzl<k && k<Nzl+Nzf)		
 		{
 			foo2 = foo1 * y;
-			psi_n(i, j, k) = (foo3 - foo2) * psi(i, j - 1, k) +
+			psi_n(i, j, k) = (foo3 - foo2) * psi(i - 1, j, k) +
 							 (foo5 - foo4 * U(i, j, k)) * psi(i, j, k) +
-							 (foo3 + foo2) * psi(i, j + 1, k);
+							 (foo3 + foo2) * psi(i + 1, j, k);
 		}
 		else
 		{
@@ -973,9 +973,9 @@ void calc_rhs_y(complex<Float> foo1,	// Find psi_n= Ry(psi)
 		}
 			else{
 			foo2 = foo1l * x;
-			psi_n(i, j, k) = (foo3l + foo2) * psi(i - 1, j, k) +
+			psi_n(i, j, k) = (foo3l + foo2) * psi(i, j + 1, k) +
 							 (foo5l - foo4l * U(i, j, k)) * psi(i, j, k) +
-							 (foo3l - foo2) * psi(i + 1, j, k);
+							 (foo3l - foo2) * psi(i, j + 1, k);
 		}
 			}
 	}
