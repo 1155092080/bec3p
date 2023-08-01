@@ -414,7 +414,7 @@ readdouble(inifile);
 			psi(i, j, k) = complex<Float>(sqrt(rho), 0);//complex initialization
 #endif
 			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
-			phiBary(i,j,k) = 0.0;// BaryU(i, j, k);
+			phiBary(i,j,k) = BaryU(i, j, k);
 #ifdef ISOWALL // Add isolated wall potential as an effective baryonic potential
 			if (r >= r0){
 			phiBary(i,j,k) = isowallpot;
@@ -584,7 +584,7 @@ if (imagt){
 			// fflush(stdout);
 			}
 		E0 = energy(mu, fileerg);
-		printf("N=%6d, t=%11.4lg, E=%11.4lg, P=%11.4lg\n", itime, t, E0, norm);
+		printf("N=%6d, t=%11.4lg, E=%11.4lg, Erel=%11.4lg, P=%11.4lg\n", itime, t, E0,fabs((E0 - E1)/E0), norm);
 		fflush(stdout);
 
 		if (itime > 0 && itime % nstep1 == 0)
@@ -860,11 +860,16 @@ Float energy(Float mu, FILE *fileerg)
 void get_U(Float mu)	// Find U
 {
 	int i, j, k;
+	//cout << density(Nx/2, Ny/2, Nz/2) <<endl;	
 
-	for (k = 0; k <= Nz; k++)
-		for (j = 0; j <= Ny; j++)
-			for (i = 0; i <= Nx; i++)
-		U(i, j, k) = c * density(i, j, k) + phiU(i, j, k) - mu;
+	for (k < 0; k < Nz; k++)
+		for (j < 0; j < Ny; j++)
+			for (i < 0; i < Nx; i++)
+		U(i, j, k) = c * density(i, j, k) + phiU(i, j, k) - mu
+#ifdef ISOTHERMAL
+		+ kbT * log(density(i, j, k)/density(Nx/2, Ny/2, Nz/2)) //Normalisation to central density
+#endif
+;
 }
 
 //*********************************************************************
@@ -1522,6 +1527,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		;
 	}
 
+	cout << rtot1 << " " << fabs((rtot1-rtot2)/rtot1) << endl;
 
 }
 

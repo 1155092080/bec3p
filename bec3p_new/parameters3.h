@@ -25,25 +25,22 @@ const Float pi = 4 * atan((Float)1);
 #define GRAV
 #define BARY
 #define INIFILE
-// Real-time or imaginary-time evolution?
-//#define REALTIME
-// Use an isothermal wall potential?
-#define ISOWALL
+#define ISOTHERMAL
 // Grid size
-#define Nx 300//120
-#define Ny 300//120
-#define Nz 300//120
+#define Nx 228//120
+#define Ny 228//120
+#define Nz 228//120
 
-std::string prefix = "./no_bary/omega0/";
-std:: string inifile = "./no_bary/omega0/psi_phi.dat";
+std::string prefix = "./small_test/fine15MilkyRot0.000/";
+std:: string inifile = "./ini_vort/fine15MilkyRot0.112/psi_ini.dat";
 
 
-const Float xl = -25.0f, yl = -25.0f, zl = -25.0f;
-const Float xr = 25.0f, yr = 25.0f, zr = 25.0f;
+const Float xl = -15.0f, yl = -15.0f, zl = -15.0f;
+const Float xr = 15.0f, yr = 15.0f, zr = 15.0f;
 
 #ifndef KERNEL
 // Simulation parameters
-const Float tau = 0.01;//10;					// Time step (units of [T])
+const Float tau = 0.005;//10;					// Time step (units of [T])
 const int time_n = 100;//0000;				// Number of iterations to run
 const Float G = 0.0001;//0.0667;				// Newton's constant (may be scaled)
 const Float N = 100000.0;//2.0;					// Particle number (may be scaled)
@@ -51,12 +48,12 @@ const Float a = 0.001;//0.5 * G * SQ(R/pi);		// Scattering length (TF default)
 const Float c = 4 * pi * a;				// BEC interaction coupling strength
 const Float R = pi*sqrt(a/G);//50.0;					// Size of initial condensate (in [L])
 const Float rho0 = pi*N/(4*R*R*R);			// Initial density (in [L^-3])
+const Float Chi = 50;                   // Dimensionless parameter for contraction
+const Float kbT = rho0/Chi*c;           // Temperature    
 const Float ex = 0.0;					// Softening parameters
 const Float ey = 0.0;
 const Float ez = 0.0;                 // In this way, the trap frequency along z is 3 of that of x and y direction
-const Float r0 = 12.0;					// Isowall radius (in [L])
-const Float isowallpot = 100.0;       // Isothermal wall potential
-const Float omega0 = 0.0;//0.0001;				// Initial angular velocity (in rad/[T])
+const Float omega0 = 0.00;//0.0001;				// Initial angular velocity (in rad/[T])
 const Float gamma0 = 0.0;				// Softening parameter
 //const int despin_n = 1;				// When to stop spinning the condensate
 // const Float aho = 1.0;                // harmonic length (in [L])
