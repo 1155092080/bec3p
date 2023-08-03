@@ -24,8 +24,14 @@ const Float pi = 4 * atan((Float)1);
 // Self-gravitating or trapped condensate?
 #define GRAV
 #define BARY
-#define INIFILE
+// #define INIFILE
 #define ISOTHERMAL
+// Show loops?
+//#define SHOW_LOOPS
+// Use interpolated profile?
+#define INTERP
+// Grid size
+
 // Grid size
 #define Nx 228//120
 #define Ny 228//120
