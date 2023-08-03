@@ -1563,6 +1563,7 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 #endif
 			rtot1 += phi(i, j, k);
 		}
+		cout << rtot1 << " " << fabs((rtot1-rtot2)/rtot1) << endl;
 	}
 
 #ifdef SHOW_LOOPS
@@ -1589,8 +1590,6 @@ void get_phi()	// Grav. potential via Poisson's Eq.
 		#endif
 		;
 	}
-
-	cout << rtot1 << " " << fabs((rtot1-rtot2)/rtot1) << endl;
 
 }
 

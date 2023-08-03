@@ -31,7 +31,7 @@ const Float pi = 4 * atan((Float)1);
 #define Ny 228//120
 #define Nz 228//120
 #define Nf 500
-std::string prefix = "./small_test/fine15MilkyRot0.000/";
+std::string prefix = "./small_test/fine15MilkyRot0.040/";
 std:: string inifile = "./ini_vort/fine15MilkyRot0.112/psi_ini.dat";
 std:: string interpfile = "./testdat.dat";
 
