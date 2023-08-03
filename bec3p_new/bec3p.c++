@@ -10,6 +10,9 @@
 #include "mkpath.h"
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <limits>
+#include <cmath>
 #ifdef USECL
 #include <CL/opencl.h>
 #include <SDKCommon.hpp>
@@ -40,6 +43,9 @@ Float *phiU = new Float[Nn];
 Float *UU = new Float[Nn];
 Float *res = new Float[Nn];
 Float *phiBary = new Float[Nn];
+vector<Float>r_interp;
+vector<Float>psi_interp;
+
 
 // Here map all the 1D data back to 3D by spicifying the counting method
 #define ijk(i,j,k) ((((i) * (Ny + 1)) + (j)) * (Nz + 1) + (k)) // Start from 0, increase by z then y then x. So (1,0,0) is the (Nz+1)*(Ny+1)-th point
@@ -79,6 +85,13 @@ void thomas(complex<Float> *, complex<Float> *, complex<Float> *,
 			complex<Float> *, int m);
 void get_density();
 void readdouble(std::string file);
+Float interpini(Float r);
+void readinterp(string file);
+template<typename T>
+int nearestNeighbourIndex(std::vector<T>& x, T& value);
+template<typename T>
+std::vector<T> interp1(std::vector<T>& x, std::vector<T>& y, std::vector<T>& x_new);
+
 
 #ifdef USECL
 
@@ -390,7 +403,9 @@ fflush(stdout);
 	foo5Z = (Float)1 - xi * dt * idz2 / (Float)2;
 #ifdef INIFILE
 readdouble(inifile);
-
+#endif
+#ifdef INTERP
+readinterp(interpfile);
 #endif
 	// Initial state
 	filepath = path + "psi_ini.dat";
@@ -404,22 +419,21 @@ readdouble(inifile);
 			for (k = 0; k <= Nz; k++)
 		{
 #ifdef GRAV
-			Float rho = init(i, j, k);
 			Float x2 = SQ(xl + i * dx);
 			Float y2 = SQ(yl + j * dy);
 			Float z2 = SQ(zl + k * dz);
 			Float r = sqrt(x2 + y2 + z2);
+			#ifdef INTERP
+			Float rho = interpini(r);
+			#else
+			Float rho = init(i, j, k);
+			#endif
 #ifndef INIFILE
 			phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			psi(i, j, k) = complex<Float>(sqrt(rho), 0);//complex initialization
 #endif
 			//phi(i, j, k) = DMiniphi(i, j, k); //(Float)(-G * N / (r > (.25 * dx) ? r : .5 * dx));
 			phiBary(i,j,k) = BaryU(i, j, k);
-#ifdef ISOWALL // Add isolated wall potential as an effective baryonic potential
-			if (r >= r0){
-			phiBary(i,j,k) = isowallpot;
-			}
-#endif
 			
 #else
 			psi(i, j, k) = complex<Float>(fermi(mu, i, j, k), 0);
@@ -435,37 +449,36 @@ readdouble(inifile);
 			for (k = 0; k <= Nz; k++)
 			{
 				psi(i, j, k) *= renorm;
-				fprintf(fileini, "%e %e %e %e %e %e\n", xl + i * dx, yl + j * dy,
-											zl + k * dz, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
-			}	
-			fprintf(fileini, "\n");	// For Gnuplot		
-	}
-	fclose(fileini);	
+			}
+	}	
+	// 		fprintf(fileini, "\n");	// For Gnuplot		
+	// }
+	// fclose(fileini);	
 	norm_ini = get_normsimp();
 	printf("Initial norm is P=%11.4lg\n", norm_ini);
 	fflush(stdout);
 printf("Setting up boundary conditions...\n");
 fflush(stdout);
 
-	// Boundary conditions psi=0
-	for (i = 0; i <= Nx; i++)
-		for (j = 0; j <= Ny; j++)
-	{
-		psi(i, j, 0) = 0;
-		psi(i, j, Nz) = 0;
-	}
-	for (j = 0; j <= Ny; j++)
-		for (k = 0; k <= Nz; k++)
-	{
-		psi(0, j, k) = 0;
-		psi(Nx, j, k) = 0;
-	}
-	for (k = 0; k <= Nz; k++)
-		for (i = 0; i <= Nx; i++)
-	{
-		psi(i, 0, k) = 0;
-		psi(i, Ny, k) = 0;
-	}
+	// // Boundary conditions psi=0
+	// for (i = 0; i <= Nx; i++)
+	// 	for (j = 0; j <= Ny; j++)
+	// {
+	// 	psi(i, j, 0) = 0;
+	// 	psi(i, j, Nz) = 0;
+	// }
+	// for (j = 0; j <= Ny; j++)
+	// 	for (k = 0; k <= Nz; k++)
+	// {
+	// 	psi(0, j, k) = 0;
+	// 	psi(Nx, j, k) = 0;
+	// }
+	// for (k = 0; k <= Nz; k++)
+	// 	for (i = 0; i <= Nx; i++)
+	// {
+	// 	psi(i, 0, k) = 0;
+	// 	psi(i, Ny, k) = 0;
+	// }
 
 printf("Setting up initial density...\n");
 fflush(stdout);
@@ -480,7 +493,19 @@ fflush(stdout);
 #else
 	get_Vtr();
 #endif
-
+for (i = 0; i <= Nx; i++)
+	{
+		for (j = 0; j <= Ny; j++)
+			for (k = 0; k <= Nz; k++)
+			{
+				double x = xl + i * dx;
+				double y = yl + j * dy;
+				double z = zl + k * dz;
+				fprintf(fileini, "%e %e %e %e %e %e\n", x, y, z, real(psi(i, j, k)), imag(psi(i, j, k)), phi(i, j, k));
+			}	
+			fprintf(fileini, "\n");	// For Gnuplot		
+	}
+	fclose(fileini);
 printf("Initiate the iteration...\n");
 fflush(stdout);
 
@@ -628,8 +653,9 @@ if (imagt){
 		if (real(dt) < 1e-15)
 		{
 
-			if (fabs(E0 - E1) < tolREL * fabs(E0) &&
-				fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
+			// if (fabs(E0 - E1) < tolREL * fabs(E0) &&
+			// 	fabs(2 * E1 - E0 - E2) < tolREL * fabs(E0))
+			if (fabs(norm - norm0) < tolREL * fabs(norm))
 			{
 				filepath = path + "psi_phi_ground.dat";
 				file_current = fopen(filepath.c_str(), "w");
@@ -727,6 +753,17 @@ Float init(int i, int j, int k)
 }
 
 //*********************************************************************
+// Initial interpolated density profile
+//*********************************************************************
+Float interpini(Float r)		
+{
+	vector<Float> newx{r};
+	vector<Float> res = interp1(r_interp, psi_interp, newx);
+
+	return res[0];
+}
+
+//*********************************************************************
 // Read a file as the initial state
 //*********************************************************************
 void readdouble(string file){
@@ -761,6 +798,32 @@ void readdouble(string file){
         }
     }
 
+}
+
+void readinterp(string file){
+    Float *f_r = new Float[Nf];
+    Float *f_psi = new Float[Nf];
+    ifstream ifs(file, ios::in); // opening the file
+    if (!ifs.is_open())
+    {
+        cout << "open interp file fail!" << endl;
+    } 
+    else
+    {
+        cout << "open interp file successful!" << endl;
+        for (int i = 0; i < Nf; i++)
+        {
+            ifs >> f_r[i] >> f_psi[i];
+        }
+        ifs.close();
+        cout << "Finished reading interp file! Number of entries: " << Nf << endl;
+    }
+    for (int i = 0; i < Nf; i++)
+	{
+        r_interp.push_back(f_r[i]);
+        psi_interp.push_back(f_psi[i]);
+		cout << r_interp[i] << " " << psi_interp[i] << endl;
+    }
 }
 
 //*********************************************************************
@@ -1540,4 +1603,57 @@ void get_density()
 		for (j = 0; j <= Ny; j++)
 			for (k = 0; k <= Nz; k++)
 				density(i, j, k) = SQ(real(psi(i, j, k))) + SQ(imag(psi(i, j, k)));
+}
+
+template<typename T>
+int nearestNeighbourIndex(std::vector<T>& x, T& value)
+{
+    T dist = std::numeric_limits<T>::max();
+    T newDist = dist;
+    size_t idx = 0;
+
+    for (size_t i = 0; i < x.size(); ++i) {
+        newDist = std::abs(value - x[i]);
+        if (newDist <= dist) {
+            dist = newDist;
+            idx = i;
+        }
+    }
+
+    return idx;
+}
+
+
+template<typename T>
+std::vector<T> interp1(std::vector<T>& x, std::vector<T>& y, std::vector<T>& x_new)
+{
+    std::vector<T> y_new;
+    T dx, dy, m, b;
+    size_t x_max_idx = x.size() - 1;
+    size_t x_new_size = x_new.size();
+
+    y_new.reserve(x_new_size);
+
+    for (size_t i = 0; i < x_new_size; ++i)
+    {
+        size_t idx = nearestNeighbourIndex(x, x_new[i]);
+
+        if (x[idx] > x_new[i])
+        {
+            dx = idx > 0 ? (x[idx] - x[idx - 1]) : (x[idx + 1] - x[idx]);
+            dy = idx > 0 ? (y[idx] - y[idx - 1]) : (y[idx + 1] - y[idx]);
+        }
+        else
+        {
+            dx = idx < x_max_idx ? (x[idx + 1] - x[idx]) : (x[idx] - x[idx - 1]);
+            dy = idx < x_max_idx ? (y[idx + 1] - y[idx]) : (y[idx] - y[idx - 1]);
+        }
+
+        m = dy / dx;
+        b = y[idx] - x[idx] * m;
+
+        y_new.push_back(x_new[i] * m + b);
+    }
+
+    return y_new;
 }

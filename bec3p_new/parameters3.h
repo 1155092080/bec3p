@@ -30,10 +30,10 @@ const Float pi = 4 * atan((Float)1);
 #define Nx 228//120
 #define Ny 228//120
 #define Nz 228//120
-
+#define Nf 500
 std::string prefix = "./small_test/fine15MilkyRot0.000/";
 std:: string inifile = "./ini_vort/fine15MilkyRot0.112/psi_ini.dat";
-
+std:: string interpfile = "./testdat.dat";
 
 const Float xl = -15.0f, yl = -15.0f, zl = -15.0f;
 const Float xr = 15.0f, yr = 15.0f, zr = 15.0f;
@@ -60,8 +60,8 @@ const Float gamma0 = 0.0;				// Softening parameter
 const Float omg = 1.587;                  // harmonic trap (in rad/[T])
 // Iteration tolerances
 const Float tolGPE = 1e-6;				// GPE nonlinear term iteration
-const Float tolPSN = 1e-4;				// Poisson relaxation method iteration
-const Float tolREL = 1e-8;				// Imaginary time system relaxation
+const Float tolPSN = 1e-5;				// Poisson relaxation method iteration
+const Float tolREL = 1e-7;				// Imaginary time system relaxation
 
 // Output control
 const int nstep0 = 1;	// number of steps of initial transient without output
